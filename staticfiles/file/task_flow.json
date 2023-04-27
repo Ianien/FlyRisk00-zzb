@@ -1,0 +1,98 @@
+{
+  "msg": "ok",
+  "code": 200,
+  "data": {
+    "data": [
+      {
+        "name": "开始",
+        "x": 0,
+        "y": 50,
+        "symbol": "roundRect",
+        "symbolSize": 100,
+        "colors": "#6a757b",
+        "isSelect": 1
+      },
+      {
+        "name": "预先准备",
+        "x": 350,
+        "y": 50,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "#eef2f6",
+        "isSelect": 0
+      },
+      {
+        "name": "直接准备",
+        "x": 900,
+        "y": 50,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+          "colors": "#3874cb"
+      },
+      {
+        "name": "试飞执行",
+        "x": 350,
+        "y": 400,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "#eef2f6"
+      },
+      {
+        "name": "试飞后讲评",
+        "x": 900,
+        "y": 400,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "#eef2f6"
+      },
+      {
+        "name": "结束",
+        "x": 1250,
+        "y": 400,
+        "symbol": "roundRect",
+        "symbolSize": 100,
+        "colors": "#6a757b"
+      }
+    ],
+    "links": [
+      {
+        "source": 0,
+        "target": 1,
+        "lineStyle": {
+          "width": 5
+        }
+      },
+      {
+        "source": 1,
+        "target": 2,
+        "lineStyle": {
+          "width": 5
+        }
+      },
+      {
+        "source": 2,
+        "target": 3,
+        "lineStyle": {
+          "width": 5
+        }
+      },
+      {
+        "source": 3,
+        "target": 4,
+        "lineStyle": {
+          "width": 5
+        }
+      },
+      {
+        "source": 4,
+        "target": 5,
+        "lineStyle": {
+          "width": 5
+        }
+      }
+
+    ],
+    "description": "",
+    "title": ""
+  }
+}

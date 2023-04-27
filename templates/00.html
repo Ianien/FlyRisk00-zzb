@@ -1,0 +1,231 @@
+{% load static %}
+<!doctype html>
+
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>试飞风险预警系统</title>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="{% static 'css/font.css' %}">
+    <link rel="stylesheet" href="{% static 'css/xadmin.css' %}">
+    <link rel="stylesheet" href="{% static 'css/xadmin.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'lib/layui/css/layui.css' %}"> -->
+    <script src="{% static 'lib/layui/layui.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/xadmin.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "layui/css/layui.css" %}">
+    <script type="text/javascript" src="{% static "layui/layui.js" %}"></script>
+    {#        <script type="text/javascript" src="{% static "js/mm.js" %}"></script>#}
+    {#        <script type="text/javascript" src="{% static "js/jquery-3.6.0.js" %}"></script>#}
+    <script src="{% static 'js/html5.min.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/respond.min.js' %}" charset="utf-8"></script>
+</head>
+<body class="index">
+<!-- 顶部开始 -->
+<div class="container">
+    <div class="logo">
+        <a href="" style="font-size: medium">试飞风险预警系统</a>
+    </div>
+    <div class="left_open">
+        <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
+    </div>
+    <ul class="layui-nav right" lay-filter="" style="text-align: center;float: right">
+        <li class="layui-nav-item">
+            <a href="javascript:;" style="">admin</a>
+            <dl class="layui-nav-child">
+                <!-- 二级菜单 -->
+                <dd>
+                    <a onclick="window.location.href='/admin/#/admin/login/';">切换后台</a>
+                <dd>
+                    <a onclick="window.location.href='/admin/#/admin/login/';">切换后台</a>
+                <dd>
+                    <a onclick="window.location.href='/admin/#/admin/auth/user/';">切换后台</a>
+                </dd>
+                <dd>
+                    <a href="./logout.html">退出</a></dd>
+            </dl>
+        </li>
+    </ul>
+
+</div>
+<!-- 顶部结束 -->
+<!-- 中部开始 -->
+<!-- 左侧菜单开始 -->
+<div class="left-nav" style="width: 230px;max-width: 230px;">
+    <div id="side-nav" style="width: 230px">
+        <ul id="nav">
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="基础信息管理">&#xe699;</i>
+                    <cite>基础信息管理（移至后台）</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('基础信息管理-试飞场景管理','database/scenemanagement/',true)">
+                            <i class="iconfont">&#xe69e;</i>
+                            <cite>试飞场景管理</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('基础信息管理-试飞科目管理','database/subjectmanagement/',true)">
+                            <i class="iconfont">&#xe69e;</i>
+                            <cite>试飞科目管理</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('基础信息管理-试飞危险源库管理','database/risksource/',true)">
+                            <i class="iconfont">&#xe69e;</i>
+                            <cite>试飞危险源库管理</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('基础信息管理-试飞危害库管理','database/subjectharm/',true)">
+                            <i class="iconfont">&#xe69e;</i>
+                            <cite>试飞危害库管理</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('基础信息管理-风险判定规则库管理','database/expertknow/',true)">
+                            <i class="iconfont">&#xe69e;</i>
+                            <cite>风险判定规则库管理</cite></a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="试飞风险识别与评估">&#xe6b2;</i>
+                    <cite>试飞业务流程</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('试飞业务流程-试飞风险识别','database/risksourceadd/',true)">
+                            <i class="iconfont">&#xe6ac;</i>
+                            <cite>试飞风险识别</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('试飞业务流程-试飞风险评估','database/subjectharmadd/',true)">
+                            <i class="iconfont">&#xe6b2;</i>
+                            <cite>试飞风险评估</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('试飞业务流程-试飞任务管理','task_management/',true)">
+                            <i class="iconfont">&#xe69e;</i>
+                            <cite>试飞任务管理</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('试飞业务流程-试飞风险预测及安全性分析','task_index/predict/beforefly/',true)">
+                            <i class="iconfont">&#xe6ce;</i>
+                            <cite>试飞风险预测及安全性分析</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('试飞业务流程-试飞风险实时预警','task_index/predict/duringfly/',true)">
+                            <i class="iconfont">&#xe6ce;</i>
+                            <cite>试飞风险实时预警</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('试飞业务流程-试飞安全仿真推演-1','',true)">
+                            <i class="iconfont">&#xe699;</i>
+                            <cite>试飞安全仿真推演</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('试飞业务流程-试飞风险联动保障-1','',true)">
+                            <i class="iconfont">&#xe699;</i>
+                            <cite>试飞风险联动保障</cite></a>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="系统管理">&#xe6ae;</i>
+                    <cite>系统管理（后台）</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('系统管理-数据字典管理','',true)">
+                            <i class="iconfont">&#xe6a9;</i>
+                            <cite>数据字典管理</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('系统管理-配置管理','database/risksource/',true)">
+                            <i class="iconfont">&#xe6a2;</i>
+                            <cite>配置管理</cite></a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="安全管理">&#xe6a4;</i>
+                    <cite>安全管理（后台）</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('安全管理-三员管理','database/subjectharm/',true)">
+                            <i class="iconfont">&#xe6b8;</i>
+                            <cite>三员管理</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('安全管理-日志管理','database/risksource/',true)">
+                            <i class="iconfont">&#xe6a4;</i>
+                            <cite>日志管理</cite></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- <div class="x-slide_left"></div> -->
+<!-- 左侧菜单结束 -->
+<!-- 右侧主体开始 -->
+<div class="page-content" style="left:230px;">
+    <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+        <ul class="layui-tab-title">
+            <li class="home">
+                <i class="layui-icon">&#xe68e;</i>我的桌面
+            </li>
+        </ul>
+
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <iframe src='/log/' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+            </div>
+        </div>
+        <div id="tab_show"></div>
+    </div>
+</div>
+<div class="page-content-bg"></div>
+<style id="theme_style"></style>
+<style>body
+.container {
+    background: rgb(0, 0, 128) !important;
+}
+
+.container .layui-nav-bar {
+    background: rgb(95, 184, 120) !important;
+}
+
+
+.left-nav {
+    background: rgba(57, 61, 73, 1) !important;
+}
+
+.left-nav a {
+    color: rgba(234, 234, 234, 1) !important;
+}
+
+.left-nav a:hover, .left-nav a.active {
+    background: rgba(100, 149, 237, 1) !important;
+}
+
+.left-nav a:hover, .left-nav a.active {
+    color: rgba(234, 234, 234, 1) !important;
+}
+
+.left-nav a:hover, .left-nav a.active {
+    border-color: rgba(0, 0, 0, 0) !important;
+}
+
+body {
+    background: rgb(241, 241, 241) !important;
+}</style>
+
+</body>
+
+</html>

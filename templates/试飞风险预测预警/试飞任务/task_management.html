@@ -1,0 +1,236 @@
+{% extends 'my_base.html' %}
+<span class="layui-breadcrumb">
+            <a href="">任务流程图</a>
+            <a href="">演示</a>
+            <a>
+              <cite>导航元素</cite></a>
+</span>
+
+{% block my_content %}
+    <div class="layui-fluid">
+        {#        <div class="layui-row layui-col-space15" style="padding-left: 10px">#}
+        {#            <button class="layui-btn layui-btn-lg" onclick="import_data()">以文件导入数据</button>#}
+        {#        </div>#}
+        <script>
+            function import_data() {
+                xadmin.open('导入文件', 'import_data/', 700, 400)
+            }
+        </script>
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body " style="height: auto;width: auto">
+                        <table class="layui-table" lay-filter="my_table" id="my_table">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-lg layui-btn-danger" lay-event="ana">选中项统计分析</button>
+            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="new"> 增加</button>
+            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="clearFilter">清除所有筛选项</button>
+            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="delete">删除</button>
+            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="export">导出到excel</button>
+        </div>
+    </script>
+    <script type="text/html" id="barDemo">
+        {#        <a class="layui-btn layui-btn-xs" lay-event="liucheng" style="background-color: #2D93CA">风险预测预警流程</a>#}
+        {#        <a class="layui-btn layui-btn-xs" lay-event="ana_task" style="background-color: #2D93CA">任务风险统计分析</a>#}
+        {#        <a class="layui-btn layui-btn-xs" lay-event="alter" style="background-color: #2D93CA">编辑</a>#}
+        {% verbatim %}
+        {{#  if(d.exe_status=="直接准备"){ }}<!--layui 规定 用 d 来表示数据实体  来展示一下按钮laytpl-->
+        <a class="layui-btn layui-btn layui-btn-xs" lay-event="predict"
+           style="background-color: #FCB41B">安全性分析</a>
+        <a class="layui-btn layui-btn layui-btn-xs" lay-event="notice" style="background-color: #2D93CA">风险提示单</a>
+        <a class="layui-btn layui-btn layui-btn-xs" lay-event="baozhang" style="background-color: #2D93CA">保障</a>
+        {{#  } }} <!-- 结束判断 -->
+
+        {{#  if(d.exe_status=="预先准备"){ }}<!--layui 规定 用 d 来表示数据实体  来展示一下按钮laytpl-->
+        <a class="layui-btn layui-btn layui-btn-xs" lay-event="notice" style="background-color: #FCB41B">风险提示单</a>
+        {{#  } }} <!-- 结束判断 -->
+
+        {{#  if(d.exe_status=="试飞执行"){ }}<!--layui 规定 用 d 来表示数据实体  来展示一下按钮laytpl-->
+        <a class="layui-btn layui-btn layui-btn-xs" lay-event="intime"
+           style="background-color: #FCB41B">实时预警分析</a>
+        <a class="layui-btn layui-btn layui-btn-xs" lay-event="notice" style="background-color: #2D93CA">风险提示单</a>
+        <a class="layui-btn layui-btn layui-btn-xs" lay-event="baozhang" style="background-color: #2D93CA">保障</a>
+        <a class="layui-btn layui-btn layui-btn-xs" lay-event="predict"
+           style="background-color: #2D93CA">安全性分析</a>
+        {{#  } }} <!-- 结束判断 -->
+        {% endverbatim %}
+        <a class="layui-btn layui-btn-xs" lay-event="alter" style="background-color: #2D93CA">编辑</a>
+    </script>
+{% endblock %}
+
+
+{% block my_script %}
+    <script>
+        layui.config({
+            base: '/static/modules/soulTable/',   // 第三方模块所在目录
+            version: 'v1.6.4' // 插件版本号
+        }).extend({
+            soulTable: 'soulTable',
+        });
+        var tableFilter;
+        layui.use('tableFilter', function () {
+            tableFilter = layui.tableFilter
+        })
+        {#$("#checkall").prop ("checked", true );#}
+    </script>
+    <script>
+        var fields_name_list = {{ fields_name_list|safe }}
+            verbose_name_list = {{ verbose_name_list|safe }}
+                my_cols = [{type: 'checkbox', fixed: 'left'}];
+        layui.use(['table', 'soulTable'], function () {
+            var table = layui.table,
+                soulTable = layui.soulTable,
+                $ = layui.$;
+            for (var i = 0; i < fields_name_list.length; i++) {
+                if (fields_name_list[i].includes('time')) {
+                    my_cols.push({
+                        field: fields_name_list[i],
+                        title: verbose_name_list[i], width: 120,
+                        sort: true, filter: {type: 'date[yyyy-MM-dd HH:mm:ss]'},
+                    })
+                } else {
+                    my_cols.push({
+                        field: fields_name_list[i],
+                        title: verbose_name_list[i], width: 120,
+                        sort: true, filter: true,
+                    })
+                }
+            }
+            my_cols.push({field: 'tool', title: '操作', align: 'left', toolbar: '#barDemo', fixed: "right", width: 430})
+
+            layui.soulTable.config({
+                drag: false, // 默认关闭表格的列拖拽，可单独开启
+                overflow: { // 默认所有表格都超出
+                    type: 'tips',
+                    header: true, // 表头支持 overflow
+                    total: true // 合计行支持 overflow
+                }
+            })
+
+            table.render({
+                elem: '#my_table'
+                , url: 'data/' + '?my_table_name_en=' + '{{ my_table_name_en }}'
+                , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                , defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示'
+                    , layEvent: 'LAYTABLE_TIPS'
+                    , icon: 'layui-icon-tips'
+                }]
+                , height: 500
+                , filter: {
+                    bottom: true
+                }
+                , title: '{{ my_table_name }}'
+                {#, page: true#}
+                , cols: [my_cols]
+                {#, autoColumnWidth: {#}
+                {#    init: true}#}
+                , done: function () {
+                    var that = this.elem.next()
+                    res.data.forEach(function (item, index) {
+                        $('th').css({'background-color': '#DCDCDC'});
+                        if (index % 2 == 0) {
+                            {#var tr = that.find(".layui-table-box tbody tr[data-index='" + index + "']").css("background-color", "s#DCDCDC")#}
+                        } else {
+                            var tr = that.find(".layui-table-box tbody tr[data-index='" + index + "']").css("background-color", "#F5F5F5")
+
+                        }
+                    })
+                    soulTable.render(this)
+                }
+            });
+
+
+            //头工具栏事件，在这加一个check所有对象的对应echarts统计图，以弹窗形式
+            table.on('toolbar(my_table)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                var data = checkStatus.data;
+                switch (obj.event) {
+                    case 'new':
+                        // 写个异步实现提示和保存
+                        xadmin.open('添加试飞任务', 'data_add/?my_table_name_en=' + '{{ my_table_name_en }}', 800, 500)
+                        break
+                    case 'delete':
+                        if (data.length == 0) {
+                            layer.alert('请选择要删除的对象');
+                        } else {
+                            layer.confirm('确认要删除吗？', function (index) {
+                                //捉到所有被选中的，发异步进行删除
+                                var id = new Array();
+                                for (var i = 0; i < checkStatus.data.length; i++) {
+                                    id.push(checkStatus.data[i]['id']);
+                                }
+                                $.post("data_del/", {"id": JSON.stringify(id)},
+                                    function (data) {
+                                        layer.msg('删除成功', {icon: 1});
+                                        table.reload('my_table', {
+                                            method: 'get'
+                                            , where: {}
+                                            , page: {
+                                                curr: 1
+                                            }
+                                        });
+                                        location.reload();
+                                    })
+                            });
+                        }
+                        break;
+                    case 'ana':
+                        var id = new Array();
+                        var str_id = ""
+                        for (var i = 0; i < checkStatus.data.length; i++) {
+                            id.push(checkStatus.data[i]['id']);
+                            str_id = str_id + "*" + checkStatus.data[i]['id']
+                        }
+                        parent.xadmin.add_tab('任务统计分析', 'task_ana/?ids=' + str_id, true)
+                        break
+                    case 'clearFilter':
+                        soulTable.clearFilter('my_table')
+                        break
+                    case 'export':
+                        soulTable.export('my_table');
+                        break
+                }
+            })
+
+            //行工具栏事件
+            table.on('tool(my_table)', function (obj) {
+                    if (obj.event === 'alter') {
+                        var data = obj.data; //获得当前行数据
+                        xadmin.open('编辑', 'alter/?my_table_name_en=' + '{{ my_table_name_en }}&id=' + obj.data.id, 1000, 600)
+                    }
+                    if (obj.event === 'liucheng') {
+                        var data = obj.data; //获得当前行数据
+                        xadmin.open('风险预测预警流程' + data.id, '/task_index/?id=' + obj.data.id + '&status=' + obj.data.exe_status, 1000, 600)
+                    }
+
+                    if (obj.event === 'ana_task') {
+                        var data = obj.data; //获得当前行数据
+                        {#得有流程标识根据不同标识进入不同步骤#}
+                        xadmin.open('任务编号' + obj.data.id + '：风险预测预警统计分析', '/task_index/predict/beforefly/', 1300, 600)
+                    }
+
+                    if (obj.event === 'predict'){
+                        xadmin.open('安全性分析'+obj.data.id, '/safe_ana/?id=' + obj.data.id + '&status=' + obj.data.exe_status, 1300, 700)
+                    }
+
+                    if (obj.event === 'intime'){
+                        xadmin.open('任务编号' + obj.data.id + '：风险预测预警统计分析', '/task_index/predict/duringfly/', 1300, 600)
+                    }
+
+                    if (obj.event === 'notice'){
+                        xadmin.open('任务编号' + obj.data.id + '风险提示单', '/risk_notice/?id='+ obj.data.id, 1300, 600)
+                    }
+            }
+            )
+            ;
+        })
+    </script>
+{% endblock %}

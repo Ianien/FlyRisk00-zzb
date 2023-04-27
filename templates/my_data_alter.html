@@ -1,0 +1,47 @@
+{% extends 'my_base.html' %}
+
+{% block my_content %}
+    <div class="layui-fluid">
+        <div class="layui-row">
+            <form class="layui-form">
+                {% for k,v in fields_name_value_dict.items %}
+                    <div class="layui-form-item">
+                        <label for="username" class="layui-form-label" style="width: 180px">
+                            <span class="x-red">*</span>{{ k }}</label>
+                        <div class="layui-input-inline" style="width: 80%">
+                            <input type="text" id="{{ v.0 }}" name="{{ v.0 }}" required=""
+                                   lay-verify="required" style="width: 80%"
+                                   autocomplete="off" class="layui-input" value="{{ v.1 }}"
+                            placeholder="{{ v.1 }}"></div>
+                    </div>
+                {% endfor %}
+
+                <div class="layui-form-item">
+                    <label for="L_repass" class="layui-form-label"></label>
+                    <button class="layui-btn" lay-submit="" id="new" type="submit"
+                            style="position:absolute;right:200px;bottom:5px;">提交
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+
+        $('#new').click(function () {
+            var check_cate = $('#check_cate').val()
+            var p_data = {
+                'my_table_name_en': '{{ my_table_name_en }}',
+                'id': '{{ id }}'
+            };
+            {% for k,v in fields_name_value_dict.items %}
+                p_data['{{ v.0 }}'] = $('#' + '{{ v.0 }}').val()
+            {% endfor %}
+            {#xadmin.father_redirect("/QE/index/production_quality_ana/management/");#}
+            $.post("", p_data,
+                function (data) {
+                    layer.msg('编辑成功', {icon: 1});
+                    xadmin.father_redirect("../");
+                }, 'json')
+        })
+    </script>
+{% endblock %}

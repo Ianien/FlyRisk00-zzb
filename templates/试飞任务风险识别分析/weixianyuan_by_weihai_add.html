@@ -1,0 +1,76 @@
+{% extends 'my_base.html' %}
+
+{% block my_content %}
+<div style="margin:20px 20px 20px 20px;font-size:20px;">
+  <div class="mb-6 row">
+    <label class="col-sm-12 col-form-label"  style="padding:15px 15px;">1.请选择危险源(   )。</label>
+    <div class="form-check form-check-inline" id="check_box_1"  style="padding:15px 15px;">
+        {% for item in weixianyuan %}
+            <input class="form-check-input" type="radio" name="inlineRadioOptions_1" id="{{item.id}}" value="{{item.risk_source}}" style="margin-left:0px;zoom:130%;">
+            <label class="form-check-label" for="{{item.id}}">{{item.risk_source}}</label>
+            <hr/>
+        {% endfor %}
+    </div>
+  </div>
+    <div class="mb-6 row">
+    <label class="col-sm-12 col-form-label"  style="padding:15px 15px;">2.请选择危害(   )。</label>
+    <div class="form-check form-check-inline" id="check_box_2"  style="padding:15px 15px;">
+        {% for item in weihai %}
+            <input class="form-check-input" type="radio" name="inlineRadioOptions_2" id="{{item.id}}" value="{{item.harm_name}}" style="margin-left:0px;zoom:130%;">
+            <label class="form-check-label" for="{{item.id}}">{{item.harm_name}}</label>
+            <hr/>
+        {% endfor %}
+    </div>
+  </div>
+  <div class="mb-3 row">
+    <label for="exampleFormControlTextarea1" class="form-label" style="padding:15px 15px;">3.备注</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" style="margin:15px 15px;"></textarea>
+  </div>
+</div>
+
+<div class="mb-3 row">
+    <div class="col-sm-3">
+        <button class="btn btn-info" style="margin-bottom:15px;margin-left:20px;" onclick="submit_data()"> 提交 </button>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block my_script %}
+<script>
+    function submit_data(){
+    var data = new Array();
+
+    var obj = document.getElementsByName('inlineRadioOptions_1');
+    for(i=0;i<obj.length;i++){
+      if(obj[i].checked){
+          data.push({check1:obj[i].value})
+          data.push({check1_id:obj[i].id})
+      }
+    };
+    var obj = document.getElementsByName('inlineRadioOptions_2');
+    for(i=0;i<obj.length;i++){
+      if(obj[i].checked){
+          data.push({check2:obj[i].value})
+          data.push({check2_id:obj[i].id})
+      }
+    };
+
+
+    data.push({text1:$('#exampleFormControlTextarea1').val()});
+    console.log(data);
+    data_post = {data:data};
+        $.ajax({
+                type:'POST',
+                url:'/weixianyuan_by_weihai/add/',
+                data:JSON.stringify(data_post),
+                contentType:'application/json',
+                success:function (data) {
+                    alert(data.msg);
+                    },
+                error:function () {alert("提交失败！")},
+        });
+    }
+</script>
+{% endblock %}

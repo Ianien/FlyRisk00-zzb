@@ -1,0 +1,89 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "/log/"
+  },
+  "logoInfo": {
+    "title": "试飞风险预警系统",
+    "image": "/static/image/AG600.png",
+    "href": "javascript:"
+  },
+  "menuInfo": [
+    {
+      "title": "识别与评估",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "试飞危险源识别",
+          "href": "/weixianyuan_activity/",
+          "icon": "fa fa-hourglass-end",
+          "target": "_self"
+        },
+        {
+          "title": "试飞危险源管理",
+          "href": "/admin/FM/risksource/",
+          "icon": "fa fa-hourglass-end",
+          "target": "_self"
+        },
+        {
+          "title": "试飞科目危害评估",
+          "href": "/weihai_activity/",
+          "icon": "fa fa-hourglass-end",
+          "target": "_self"
+        },
+        {
+          "title": "试飞科目危害管理",
+          "href": "/admin/FM/subjectharm/",
+          "icon": "fa fa-hourglass-end",
+          "target": "_self"
+        },
+        {
+          "title": "危害产生原因分析",
+          "icon": "fa fa-slideshare",
+          "href": "/weixianyuan_by_weihai/",
+          "target": "_self"
+        }
+      ]
+    },
+    {
+      "title": "试飞业务流程",
+      "icon": "fa fa-slideshare",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "试飞任务管理",
+          "icon": "fa fa-slideshare",
+          "href": "/task_management/",
+          "target": "_self"
+        },
+        {
+          "title": "试飞风险预测及安全性分析",
+          "icon": "fa fa-slideshare",
+          "href": "/beforefly/select_task/",
+          "target": "_self"
+        },
+        {
+          "title": "试飞风险实时预警",
+          "icon": "fa fa-slideshare",
+          "href": "/duringfly/select_task/",
+          "target": "_self"
+        }
+      ]
+    },
+    {
+      "title": "试飞安全仿真推演",
+      "icon": "fa fa-slideshare",
+      "href": "",
+      "target": "_self"
+    },
+    {
+      "title": "试飞风险联动保障",
+      "icon": "fa fa-slideshare",
+      "href": "",
+      "target": "_self"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{% extends 'my_base.html' %}
+
+{% block my_nav %}
+    <div class="x-nav">
+    <span class="layui-breadcrumb">
+            <a>
+              <cite>任务选择</cite></a>
+          </span></div>
+{% endblock %}
+
+{% block my_content %}
+    <div class="layui-fluid">
+        <div class="layui-fluid">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 150px;">
+                <legend align="center" style="font-size: xxx-large;font-weight: bolder">实时预警：试飞任务选择</legend>
+            </fieldset>
+            <div class="layui-col-lg2" style="margin-left: 200px">
+                <legend align="center" style="font-size: x-large;font-weight: bolder">选择试飞任务:</legend>
+            </div>
+            <div class="layui-col-lg5">
+                <select type="text" id="my_select" name="my_select" required=""
+                        lay-verify="required" style="width: 100%;"
+                        autocomplete="off" class="layui-input"></select>
+            </div>
+            <div class="layui-col-lg2" style="padding-left: 50px">
+                <button class="layui-btn" id="send_id">确认</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block my_script %}
+    <script>
+        function addListOption(selectId, listItems) {
+            // 循环遍历数组
+            for (var item in listItems) {
+                // 获取下拉列表框对象
+                var selectID = document.getElementById(selectId);
+                // 创建option元素
+                var option = document.createElement("option");
+                // 添加节点
+                option.appendChild(document.createTextNode(listItems[item]));
+                // 设置value属性
+                option.setAttribute("value", listItems[item]);
+                // 将option添加到下拉列表框中
+                selectID.appendChild(option);
+            }
+        }
+
+        var my_items = {{ my_items|safe }};
+        addListOption('my_select', my_items);
+
+        $("#send_id").click(function () {
+            var selected = $("#my_select option:selected");
+            {#parent.xadmin.add_tab('实时预警' + selected.val(),'/task_index/predict/duringfly/?id='+selected.val(),true)#}
+            parent.layui.miniTab.openNewTabByIframe({
+                    href: '/task_index/predict/duringfly/?id='+selected.val(),
+                    title: '实时预警' + selected.val(),
+                });
+        })
+    </script>
+{% endblock %}

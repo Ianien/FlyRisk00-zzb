@@ -1,0 +1,213 @@
+{% extends 'my_base.html' %}
+
+{% block my_content %}
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body " style="height: auto">
+                        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                    <legend align="center" style="font-weight: bold;padding-top: 20px">试飞安全风险管理活动记录表（危险源）</legend>
+                </fieldset>
+                        <table class="layui-table" lay-filter="my_table" id="my_table">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            {% if '审核人员' in group_list %}
+            <button class="layui-btn layui-btn-primary" lay-event="new">新建活动</button>
+            <button class="layui-btn layui-btn-primary" lay-event="delete">删除活动</button>
+            {% endif %}
+            <button class="layui-btn layui-btn-primary" lay-event="clearFilter">清除所有筛选项</button>
+            <button class="layui-btn layui-btn-primary" lay-event="export">导出到excel</button>
+        </div>
+    </script>
+    <script type="text/html" id="barDemo">
+    {% if '部门人员' in group_list %}
+        {% verbatim %}
+        {{#  if(d.status_activity=="活动结束"){ }}<!--layui 规定 用 d 来表示数据实体  来展示一下按钮laytpl-->
+        <a class="layui-btn layui-btn-xs" lay-event="history" style="">我的问卷</a>
+        {{#  }else{ }}
+        <a class="layui-btn layui-btn-xs" lay-event="check2" style="">问卷填写</a>
+        <a class="layui-btn layui-btn-xs" lay-event="history" style="">我的问卷</a>
+        {{#  } }} <!-- 结束判断 -->
+        {% endverbatim %}
+    {% endif %}
+    {% if '审核人员' in group_list %}
+        {% verbatim %}
+        {{#  if(d.status_activity=="活动结束"){ }}<!--layui 规定 用 d 来表示数据实体  来展示一下按钮laytpl-->
+        <a class="layui-btn layui-btn-xs" lay-event="check" style="">查看模板</a>
+        {{#  }else{ }}
+        <a class="layui-btn layui-btn-xs" lay-event="check" style="">查看模板</a>
+        <a class="layui-btn layui-btn-xs" lay-event="alter" style="">编辑活动</a>
+        <a class="layui-btn layui-btn-xs  layui-btn-warm" lay-event="evalue" style="">组织评估</a>
+        {{#  } }} <!-- 结束判断 -->
+        {% endverbatim %}
+    {% endif %}
+
+
+    </script>
+{% endblock %}
+
+
+{% block my_script %}
+    <script>
+    {#console.log({{ user.username }})#}
+        layui.config({
+            base: '/static/modules/soulTable/',   // 第三方模块所在目录
+            version: 'v1.6.4' // 插件版本号
+        }).extend({
+            soulTable: 'soulTable',
+        });
+        var tableFilter;
+        layui.use('tableFilter', function () {
+            tableFilter = layui.tableFilter
+        })
+    </script>
+    <script>
+        var fields_name_list = {{ fields_name_list|safe }}
+            verbose_name_list = {{ verbose_name_list|safe }}
+                my_cols = [{type: 'checkbox', fixed: 'left'}];
+        layui.use(['table', 'soulTable'], function () {
+            var table = layui.table,
+                soulTable = layui.soulTable;
+            for (var i = 0; i < fields_name_list.length; i++) {
+                if (fields_name_list[i].includes('time')) {
+                    my_cols.push({
+                        field: fields_name_list[i],
+                        title: verbose_name_list[i], width: 'auto',
+                        sort: true, filter: {type: 'date[yyyy-MM-dd HH:mm:ss]'},
+                    })
+                } else {
+                    my_cols.push({
+                        field: fields_name_list[i],
+                        title: verbose_name_list[i], width: 'auto',
+                        sort: true, filter: true,
+                    })
+                }
+            }
+            my_cols.push({field: 'tool', title: '操作', toolbar: '#barDemo', fixed: "right"})
+            layui.soulTable.config({
+                drag: false, // 默认关闭表格的列拖拽，可单独开启
+                overflow: { // 默认所有表格都超出
+                    type: 'tips',
+                    header: true, // 表头支持 overflow
+                    total: true // 合计行支持 overflow
+                }
+            })
+            table.render({
+                elem: '#my_table'
+                , even: true
+                , url: 'data/' + '?my_table_name_en=' + '{{ my_table_name_en }}'
+                , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                , defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示'
+                    , layEvent: 'LAYTABLE_TIPS'
+                    , icon: 'layui-icon-tips'
+                }]
+                , height: 500
+                , width : 'full-100'
+                , cellMinWidth: 80
+                , filter: {
+                    bottom: true
+                }
+                , title: '{{ my_table_name }}'
+                {#, page: true#}
+                , cols: [my_cols]
+                , autoColumnWidth: {
+                    init: true
+                }
+                , done: function (res, curr, count) {
+                    var that = this.elem.next()
+                    res.data.forEach(function (item, index) {
+                        $('th').css({'background-color': '#DCDCDC'});
+                        if (index % 2 == 0) {
+                            {#var tr = that.find(".layui-table-box tbody tr[data-index='" + index + "']").css("background-color", "s#DCDCDC")#}
+                        } else {
+                            var tr = that.find(".layui-table-box tbody tr[data-index='" + index + "']").css("background-color", "#F5F5F5")
+
+                        }
+                    })
+                    soulTable.render(this)
+                }
+            });
+            //头工具栏事件
+            table.on('toolbar(my_table)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                var data = checkStatus.data;
+                switch (obj.event) {
+                    case 'new':
+                        // 写个异步实现提示和保存
+                        xadmin.open('新建活动', 'add/?my_table_name_en=' + '{{ my_table_name_en }}', 1000, 600)
+                        break
+                    case 'delete':
+                        if (data.length == 0) {
+                            layer.alert('请选择要删除的对象');
+                        } else {
+                            layer.confirm('确认要删除吗？', function (index) {
+                                //捉到所有被选中的，发异步进行删除
+                                var id = new Array();
+                                for (var i = 0; i < checkStatus.data.length; i++) {
+                                    id.push(checkStatus.data[i]['id']);
+                                }
+                                $.post("data_del/", {
+                                        "ids": JSON.stringify(id),
+                                        "my_table_name_en": "{{ my_table_name_en }}"
+                                    },
+                                    function (data) {
+                                        layer.msg('删除成功', {icon: 1});
+                                        table.reload('test', {
+                                            method: 'get'
+                                            , where: {}
+                                            , page: {
+                                                curr: 1
+                                            }
+                                        });
+                                        location.reload();
+                                    })
+                            });
+                        }
+                        break;
+                    case 'clearFilter':
+                        soulTable.clearFilter('my_table')
+                        break
+                    case 'export':
+                        soulTable.export('my_table');
+                        break
+                }
+            })
+
+            //行工具栏事件
+            table.on('tool(my_table)', function (obj) {
+                var data = obj.data; //获得当前行数据
+                switch (obj.event) {
+                    //审核人员查看
+                    case 'check':
+                        xadmin.open('识别活动' + obj.data.id, '/weixianyuan_initial/add/' + '?id=' + obj.data.id, 700, 600)
+                    {#xadmin.open('任务编号' + obj.data.task_number + '：风险预测预警流程', '/task_index?id=' + obj.data.task_number + '&status=' + obj.data.exe_status, 1300, 600)#}
+                        break
+                    //审核人员编辑活动，后面得改
+                    case 'alter':
+                        xadmin.open('编辑', 'alter/?my_table_name_en=' + '{{ my_table_name_en }}&id=' + obj.data.id, 1000, 600)
+                        break
+                    //审核人员组织评估
+                    case 'evalue':
+                        xadmin.open('组织评估', '/weixianyuan_initial/?fkey_id=' + data.id, 1000, 600)
+                        break
+                    //各部门去查看问卷
+                    case 'check2':
+                        xadmin.open('活动' + obj.data.id, '/weixianyuan_initial/add/' + '?id=' + obj.data.id, 700, 600)
+                        break
+                    //查看问卷对应历史
+                    case 'history':
+                        xadmin.open('编辑', '/weixianyuan_initial/mine/?fkey_id=' + data.id, 1100, 660)
+                        break
+                }
+            });
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,273 @@
+{% extends 'my_base.html' %}
+<span class="layui-breadcrumb">
+            <a href="">任务流程图</a>
+            <a href="">演示</a>
+            <a>
+              <cite>导航元素</cite></a>
+</span>
+
+{% block my_content %}
+    <style>
+        .layui-form-label {
+            width: 120px;
+        }
+
+        .layui-input-block {
+            margin-left: 130px;
+        }
+
+        .card-subtitle {
+            text-align: center;
+            font-size: large;
+
+            background: #0000FF;
+        }
+
+        .sub-title {
+            text-align: center;
+            font-size: small;
+            background: grey;
+        }
+
+    </style>
+
+
+    <form class="layui-form layui-form-pane" action="">
+        {#             飞机运行阶段#}
+
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+            <legend>飞机运行阶段</legend>
+        </fieldset>
+
+       <div class="layui-form-item">
+                <div class="layui-inline">
+                  <label class="layui-form-label" style="width: 100px;">试飞机场</label>
+                    <div class="layui-input-inline">
+                      <select name="airport" id="试飞机场" lay-verify="">
+                          <option value="010">北京</option>
+                          <option value="021">上海</option>
+                          <option value="0571">杭州</option>
+                       </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                  <label class="layui-form-label" style="width: 100px;">起飞场压</label>
+                  <div class="layui-input-inline">
+                      <input type="text" id="起飞场压" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                 <div class="layui-inline">
+                  <label class="layui-form-label" style="width: 100px;">温度</label>
+                   <div class="layui-input-inline">
+                      <input type="text" id="温度" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                    </div>
+                </div>{# 第一行参数 #}
+             <div class="layui-form-item">
+                <div class="layui-inline">
+                  <label class="layui-form-label" style="width: 100px;">坡度</label>
+                    <div class="layui-input-inline">
+                      <input type="text" id="坡度" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                  <label class="layui-form-label" style="width: 100px;">水域</label>
+                  <div class="layui-input-inline">
+                      <input type="text" id="水域"  name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                 <div class="layui-inline">
+                  <label class="layui-form-label" style="width: 100px;">跑道状态</label>
+                    <div class="layui-input-inline">
+                      <input type="text" id="跑道状态" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                    </div>
+                </div>{# 第二行参数 #}
+             <div class="layui-form-item">
+                <div class="layui-inline">
+                  <label class="layui-form-label" style="width: 100px;">总量</label>
+                    <div class="layui-input-inline">
+                      <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                  <label class="layui-form-label" style="width: 100px;">起飞速度</label>
+                    <div class="layui-input-inline">
+                      <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                 <div class="layui-inline">
+                  <label class="layui-form-label" style="width: 100px;">巡航高度</label>
+                   <div class="layui-input-inline">
+                      <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+          </div>{# 第三行参数 #}
+             <div class="layui-form-item">
+                <div class="layui-inline">
+                  <label class="layui-form-label" style="width: 100px;">着陆机场</label>
+                    <div class="layui-input-inline">
+                      <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                  <label class="layui-form-label" style="width: 100px;">着陆场压</label>
+                    <div class="layui-input-inline">
+                      <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                 <div class="layui-inline">
+                  <label class="layui-form-label" style="width: 100px;">温度</label>
+                   <div class="layui-input-inline">
+                      <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+          </div>{# 第四行参数 #}
+
+        {#         任务阶段#}
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+            <legend>森林灭火</legend>
+        </fieldset>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px;">灭火策略</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px;">投水方式</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px;">火点位置</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+        {# 第一行参数 #}
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px;">火场风速</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px;">火场风速</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px;">火焰高度</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+        {# 第二行参数 #}
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px;">烟雾浓度</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px;">......</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+
+        </div>
+        {# 第三行参数 #}
+
+        {#         保障参数#}
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+            <legend>保障参数</legend>
+        </fieldset>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px;">保障专业</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px;">保障人数</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px;">保障数量</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+        {# 第一行参数 #}
+
+    </form>
+    <div class="layui-input-block">
+        <button class="layui-btn" id="my_submit">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+
+
+{% endblock %}
+{% block my_script %}
+    <script>
+
+    layui.use('form', function(){
+              var form = layui.form;
+
+              //监听提交
+               $("#my_submit").on('click',function (){
+                   console.log('dasfsafaf')
+                   var num1=$('#试飞机场').val()
+            {#var num2=$('#起飞场压').val()#}
+            {#var num3=$('#温度').val()#}
+            {#var num4=$('#坡度').val()#}
+            {#var num5=$('#水域').val()#}
+            {#var num6=$('#跑道状态').val()#}
+                var p_data = {
+                    'airports': num1,
+                }
+                   console.log(num1)
+                //data.field是表单数据
+                $.ajax({
+                  type: "POST",
+                  url: "/getdata/",
+                  data: p_data,
+                  success: function(msg){
+                      console.log('llllllll')
+                    xadmin.open('安全性分析', '/safe_ana_res/', 1000, 600);
+                  },
+                  error:function(msg){
+                    //失败回调函数
+                      console.log(msg)
+                  }
+                });
+                return false; //阻止表单跳转
+              });
+            });
+    </script>
+
+{% endblock %}

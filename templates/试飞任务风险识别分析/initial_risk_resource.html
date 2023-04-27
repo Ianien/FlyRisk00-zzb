@@ -1,0 +1,652 @@
+{% extends 'my_base.html' %}
+
+{% block my_content %}
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link active"
+          id="home-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#home-tab-pane"
+          type="button"
+          role="tab"
+          aria-controls="home-tab-pane"
+          aria-selected="true"
+        >
+          <b>第一步：</b>部门审核
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          id="profile-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#profile-tab-pane"
+          type="button"
+          role="tab"
+          aria-controls="profile-tab-pane"
+          aria-selected="false"
+        >
+          <b>第二步：</b>部门修改
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          id="contact-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#contact-tab-pane"
+          type="button"
+          role="tab"
+          aria-controls="contact-tab-pane"
+          aria-selected="false"
+        >
+          <b>第三步：</b>专家评审
+        </button>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+      <div
+        class="tab-pane fade show active"
+        id="home-tab-pane"
+        role="tabpanel"
+        aria-labelledby="home-tab"
+        tabindex="0"
+      >
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body " style="height: auto">
+                            <table class="layui-table" lay-filter="my_table1" id="my_table1">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/html" id="toolbarDemo1">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-primary" lay-event="add_ku">审核通过</button>
+                <button class="layui-btn layui-btn-primary" lay-event="delete">删除</button>
+                <button class="layui-btn layui-btn-primary" lay-event="clearFilter">清除所有筛选项</button>
+                <button class="layui-btn layui-btn-primary" lay-event="export">导出到excel</button>
+            </div>
+        </script>
+        <script type="text/html" id="barDemo1">
+            <a class="layui-btn layui-btn-xs" lay-event="check" style="">查看</a>
+        </script>
+      </div>
+      <div
+        class="tab-pane fade"
+        id="profile-tab-pane"
+        role="tabpanel"
+        aria-labelledby="profile-tab"
+        tabindex="1"
+      >
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body " style="height: auto">
+                            <table class="layui-table" lay-filter="my_table2" id="my_table2">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/html" id="toolbarDemo2">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-primary" lay-event="add_ku">组织专家评审</button>
+                <button class="layui-btn layui-btn-primary" lay-event="delete">删除</button>
+                <button class="layui-btn layui-btn-primary" lay-event="clearFilter">清除所有筛选项</button>
+                <button class="layui-btn layui-btn-primary" lay-event="export">导出到excel</button>
+            </div>
+        </script>
+        <script type="text/html" id="barDemo2">
+            <a class="layui-btn layui-btn-xs" lay-event="check" style="">查看</a>
+            <a class="layui-btn layui-btn-xs" lay-event="alter" style="">编辑</a>
+        </script>
+      </div>
+      <div
+        class="tab-pane fade"
+        id="contact-tab-pane"
+        role="tabpanel"
+        aria-labelledby="contact-tab"
+        tabindex="0"
+      >
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body " style="height: auto">
+                            <table class="layui-table" lay-filter="my_table3" id="my_table3">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/html" id="toolbarDemo3">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-primary" lay-event="add_ku">添加至危险源库</button>
+                <button class="layui-btn layui-btn-primary" lay-event="delete">删除</button>
+                <button class="layui-btn layui-btn-primary" lay-event="clearFilter">清除所有筛选项</button>
+                <button class="layui-btn layui-btn-primary" lay-event="export">导出到excel</button>
+            </div>
+        </script>
+        <script type="text/html" id="barDemo3">
+            <a class="layui-btn layui-btn-xs" lay-event="check" style="">查看</a>
+            <a class="layui-btn layui-btn-xs" lay-event="alter" style="">编辑</a>
+        </script>
+      </div>
+    </div>
+
+{% endblock %}
+
+
+{% block my_script %}
+    <script>
+        layui.config({
+            base: '/static/modules/soulTable/',   // 第三方模块所在目录
+            version: 'v1.6.4' // 插件版本号
+        }).extend({
+            soulTable: 'soulTable',
+        });
+        var tableFilter;
+        layui.use('tableFilter', function () {
+            tableFilter = layui.tableFilter
+        })
+    </script>
+    <script>
+        var fields_name_list = {{ fields_name_list|safe }}
+            verbose_name_list = {{ verbose_name_list|safe }}
+                my_cols = [{type: 'checkbox', fixed: 'left'}];
+        layui.use(['table', 'soulTable'], function () {
+            var table = layui.table,
+                soulTable = layui.soulTable;
+            for (var i = 0; i < fields_name_list.length; i++) {
+                if (fields_name_list[i].includes('time')) {
+                    my_cols.push({
+                        field: fields_name_list[i],
+                        title: verbose_name_list[i], width: 120,
+                        sort: true, filter: {type: 'date[yyyy-MM-dd HH:mm:ss]'},
+                    })
+                } else {
+                    my_cols.push({
+                        field: fields_name_list[i],
+                        title: verbose_name_list[i], width: 120,
+                        sort: true, filter: true,
+                    })
+                }
+            }
+            my_cols.push({field: 'tool', title: '操作', align: 'left', toolbar: '#barDemo1', fixed: "right"})
+            layui.soulTable.config({
+                drag: false, // 默认关闭表格的列拖拽，可单独开启
+                overflow: { // 默认所有表格都超出
+                    type: 'tips',
+                    header: true, // 表头支持 overflow
+                    total: true // 合计行支持 overflow
+                }
+            })
+            var the_url = 'data/' + '?my_table_name_en=' + '{{ my_table_name_en }}'
+            {% for k,v in filter_dict.items %}
+                the_url = the_url + '&{{ k }}={{ v }}'+"&status_activity__in=['等待审核','审核未通过','审核通过','审核人员已修改','等待专家评审','专家评审未通过','已进入危险源库','专家已修改','审核人员已修改（原问卷）','专家已修改（原问卷）']"
+            {% endfor %}
+            console.log(the_url)
+            table.render({
+                elem: '#my_table1'
+                , even: true
+                , url: the_url
+                , toolbar: '#toolbarDemo1' //开启头部工具栏，并为其绑定左侧模板
+                , defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示'
+                    , layEvent: 'LAYTABLE_TIPS'
+                    , icon: 'layui-icon-tips'
+                }]
+                , height: 500
+                , filter: {
+                    bottom: true
+                }
+                , title: '{{ my_table_name }}'
+                {#, page: true#}
+                , cols: [my_cols]
+                , autoColumnWidth: {
+                    init: true
+                }
+                , done: function (res, curr, count) {
+                    var that = this.elem.next()
+                    res.data.forEach(function (item, index) {
+                        $('th').css({'background-color': '#DCDCDC'});
+                        if (index % 2 == 0) {
+                            {#var tr = that.find(".layui-table-box tbody tr[data-index='" + index + "']").css("background-color", "s#DCDCDC")#}
+                        } else {
+                            var tr = that.find(".layui-table-box tbody tr[data-index='" + index + "']").css("background-color", "#F5F5F5")
+
+                        }
+                    })
+                    soulTable.render(this)
+                }
+            });
+            //头工具栏事件
+            table.on('toolbar(my_table1)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                var data = checkStatus.data;
+                switch (obj.event) {
+                    case 'add_ku':
+                        var choose = new Array();
+                        for (var i = 0; i < checkStatus.data.length; i++) {
+                            choose.push(checkStatus.data[i]['id']);
+                        }
+                        $.post("data_add_ku/", {
+                            "fkey_id":"{{fkey_id}}",
+                            "ids": JSON.stringify(choose),
+                            "my_table_name_en": "risksource"
+                        },
+                        function (data) {
+                            layer.msg('提交成功', {icon: 1});
+                            table.reload('test', {
+                                method: 'get'
+                                , where: {}
+                                , page: {
+                                    curr: 1
+                                }
+                            });
+                            location.reload();
+                        })
+                        break
+                    case 'new':
+                        // 写个异步实现提示和保存
+                        xadmin.open('新建活动', 'add/?my_table_name_en=' + '{{ my_table_name_en }}', 600, 600)
+                        break
+                    case 'delete':
+                        if (data.length == 0) {
+                            layer.alert('请选择要删除的对象');
+                        } else {
+                            layer.confirm('确认要删除吗？', function (index) {
+                                //捉到所有被选中的，发异步进行删除
+                                var id = new Array();
+                                for (var i = 0; i < checkStatus.data.length; i++) {
+                                    id.push(checkStatus.data[i]['id']);
+                                }
+                                $.post("data_del/", {
+                                        "ids": JSON.stringify(id),
+                                        "my_table_name_en": "{{ my_table_name_en }}"
+                                    },
+                                    function (data) {
+                                        layer.msg('删除成功', {icon: 1});
+                                        table.reload('test', {
+                                            method: 'get'
+                                            , where: {}
+                                            , page: {
+                                                curr: 1
+                                            }
+                                        });
+                                        location.reload();
+                                    })
+                            });
+                        }
+                        break;
+                    case 'clearFilter':
+                        soulTable.clearFilter('my_table1')
+                        break
+                    case 'export':
+                        soulTable.export('my_table1');
+                        break
+                }
+            })
+
+            //行工具栏事件
+            table.on('tool(my_table1)', function (obj) {
+                var data = obj.data; //获得当前行数据
+                switch (obj.event) {
+                    //审核人员查看
+                    case 'check':
+                        xadmin.open('活动x', '/weixianyuan_initial/detail/'+'?id='+obj.data.id, 750, 550)
+                    {#xadmin.open('任务编号' + obj.data.task_number + '：风险预测预警流程', '/task_index?id=' + obj.data.task_number + '&status=' + obj.data.exe_status, 1300, 600)#}
+                        break
+                    //审核人员编辑活动
+                    case 'alter':
+                        xadmin.open('编辑', '/weixianyuan_initial/alter/'+'?id='+obj.data.id+'&ac_id='+obj.data.fkey, 750, 550)
+                        break
+                    //各部门去查看问卷
+                    case 'check2':
+                        xadmin.open('编辑', 'data_alternew/?error_id=' + data.error_id, 750, 550)
+                        break
+                    //查看问卷对应历史
+                    case 'history':
+                        xadmin.open('编辑', 'data_alternew/?error_id=' + data.error_id, 750, 550)
+                        break
+                }
+            });
+        })
+    </script>
+    <script>
+        var fields_name_list = {{ fields_name_list|safe }}
+            verbose_name_list = {{ verbose_name_list|safe }}
+                my_cols2 = [{field: 'tool', title: '操作', align: 'left', toolbar: '#barDemo2'}];
+        layui.use(['table', 'soulTable'], function () {
+            var table = layui.table,
+                soulTable = layui.soulTable;
+            for (var i = 0; i < fields_name_list.length; i++) {
+                if (fields_name_list[i].includes('time')) {
+                    my_cols2.push({
+                        field: fields_name_list[i],
+                        title: verbose_name_list[i], width: 120,
+                        sort: true, filter: {type: 'date[yyyy-MM-dd HH:mm:ss]'},
+                    })
+                } else {
+                    my_cols2.push({
+                        field: fields_name_list[i],
+                        title: verbose_name_list[i], width: 120,
+                        sort: true, filter: true,
+                    })
+                }
+            }
+            layui.soulTable.config({
+                drag: false, // 默认关闭表格的列拖拽，可单独开启
+                overflow: { // 默认所有表格都超出
+                    type: 'tips',
+                    header: true, // 表头支持 overflow
+                    total: true // 合计行支持 overflow
+                }
+            })
+            var the_url = 'data/' + '?my_table_name_en=' + '{{ my_table_name_en }}'
+            {% for k,v in filter_dict.items %}
+                the_url = the_url + '&{{ k }}={{ v }}'+"&status_activity__in=['审核通过','等待专家评审','审核人员已修改','专家评审未通过','专家已修改','已进入危险源库','专家已修改（原问卷）']"
+            {% endfor %}
+            console.log(the_url)
+            table.render({
+                elem: '#my_table2'
+                , even: true
+                , url: the_url
+                , toolbar: '#toolbarDemo2' //开启头部工具栏，并为其绑定左侧模板
+                , defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示'
+                    , layEvent: 'LAYTABLE_TIPS'
+                    , icon: 'layui-icon-tips'
+                }]
+                , height: 500
+                , filter: {
+                    bottom: true
+                }
+                , title: '{{ my_table_name }}'
+                {#, page: true#}
+                , cols: [my_cols2]
+                , autoColumnWidth: {
+                    init: true
+                }
+                , done: function (res, curr, count) {
+                    var that = this.elem.next()
+                    res.data.forEach(function (item, index) {
+                        $('th').css({'background-color': '#DCDCDC'});
+                        if (index % 2 == 0) {
+                            {#var tr = that.find(".layui-table-box tbody tr[data-index='" + index + "']").css("background-color", "s#DCDCDC")#}
+                        } else {
+                            var tr = that.find(".layui-table-box tbody tr[data-index='" + index + "']").css("background-color", "#F5F5F5")
+
+                        }
+                    })
+                    soulTable.render(this)
+                }
+            });
+            //头工具栏事件
+            table.on('toolbar(my_table2)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                var data = checkStatus.data;
+                switch (obj.event) {
+                    case 'add_ku':
+                        $.post("data_add_ku/", {
+                            "fkey_id":"{{fkey_id}}",
+                            "ids": 2,
+                            "my_table_name_en": "risksource"
+                        },
+                        function (data) {
+                            layer.msg('提交成功', {icon: 1});
+                            table.reload('test', {
+                                method: 'get'
+                                , where: {}
+                                , page: {
+                                    curr: 1
+                                }
+                            });
+                            location.reload();
+                        })
+                        break
+                    case 'new':
+                        // 写个异步实现提示和保存
+                        xadmin.open('新建活动', 'add/?my_table_name_en=' + '{{ my_table_name_en }}', 600, 600)
+                        break
+                    case 'delete':
+                        if (data.length == 0) {
+                            layer.alert('请选择要删除的对象');
+                        } else {
+                            layer.confirm('确认要删除吗？', function (index) {
+                                //捉到所有被选中的，发异步进行删除
+                                var id = new Array();
+                                for (var i = 0; i < checkStatus.data.length; i++) {
+                                    id.push(checkStatus.data[i]['id']);
+                                }
+                                $.post("data_del/", {
+                                        "ids": JSON.stringify(id),
+                                        "my_table_name_en": "{{ my_table_name_en }}"
+                                    },
+                                    function (data) {
+                                        layer.msg('删除成功', {icon: 1});
+                                        table.reload('test', {
+                                            method: 'get'
+                                            , where: {}
+                                            , page: {
+                                                curr: 1
+                                            }
+                                        });
+                                        location.reload();
+                                    })
+                            });
+                        }
+                        break;
+                    case 'clearFilter':
+                        soulTable.clearFilter('my_table2')
+                        break
+                    case 'export':
+                        soulTable.export('my_table2');
+                        break
+                }
+            })
+
+            //行工具栏事件
+            table.on('tool(my_table2)', function (obj) {
+                var data = obj.data; //获得当前行数据
+                switch (obj.event) {
+                    //审核人员查看
+                    case 'check':
+                        xadmin.open('活动x', '/weixianyuan_initial/detail/'+'?id='+obj.data.id, 750, 550)
+                    {#xadmin.open('任务编号' + obj.data.task_number + '：风险预测预警流程', '/task_index?id=' + obj.data.task_number + '&status=' + obj.data.exe_status, 1300, 600)#}
+                        break
+                    case 'alter':
+                        xadmin.open('编辑', '/weixianyuan_initial/alter/'+'?id='+obj.data.id+'&ac_id='+obj.data.fkey+'&role=2', 750, 550)
+                        break
+                    //各部门去查看问卷
+                    case 'check2':
+                        xadmin.open('编辑', 'data_alternew/?error_id=' + data.error_id, 750, 550)
+                        break
+                    //查看问卷对应历史
+                    case 'history':
+                        xadmin.open('编辑', 'data_alternew/?error_id=' + data.error_id, 750, 550)
+                        break
+                }
+            });
+        })
+    </script>
+    <script>
+        var fields_name_list = {{ fields_name_list|safe }}
+            verbose_name_list = {{ verbose_name_list|safe }}
+                my_cols3 = [{type: 'checkbox'},{field: 'tool', title: '操作', align: 'left', toolbar: '#barDemo3'}];
+        layui.use(['table', 'soulTable'], function () {
+            var table = layui.table,
+                soulTable = layui.soulTable;
+            for (var i = 0; i < fields_name_list.length; i++) {
+                if (fields_name_list[i].includes('time')) {
+                    my_cols3.push({
+                        field: fields_name_list[i],
+                        title: verbose_name_list[i], width: 120,
+                        sort: true, filter: {type: 'date[yyyy-MM-dd HH:mm:ss]'},
+                    })
+                } else {
+                    my_cols3.push({
+                        field: fields_name_list[i],
+                        title: verbose_name_list[i], width: 120,
+                        sort: true, filter: true,
+                    })
+                }
+            }
+            layui.soulTable.config({
+                drag: false, // 默认关闭表格的列拖拽，可单独开启
+                overflow: { // 默认所有表格都超出
+                    type: 'tips',
+                    header: true, // 表头支持 overflow
+                    total: true // 合计行支持 overflow
+                }
+            })
+            var the_url = 'data/' + '?my_table_name_en=' + '{{ my_table_name_en }}'
+            {% for k,v in filter_dict.items %}
+                the_url = the_url + '&{{ k }}={{ v }}'+"&status_activity__in=['等待专家评审','专家已修改','专家评审未通过','已进入危险源库']"
+            {% endfor %}
+            console.log(the_url)
+            table.render({
+                elem: '#my_table3'
+                , even: true
+                , url: the_url
+                , toolbar: '#toolbarDemo3' //开启头部工具栏，并为其绑定左侧模板
+                , defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示'
+                    , layEvent: 'LAYTABLE_TIPS'
+                    , icon: 'layui-icon-tips'
+                }]
+                , height: 500
+                , filter: {
+                    bottom: true
+                }
+                , title: '{{ my_table_name }}'
+                {#, page: true#}
+                , cols: [my_cols3]
+                , autoColumnWidth: {
+                    init: true
+                }
+                , done: function (res, curr, count) {
+                    var that = this.elem.next()
+                    res.data.forEach(function (item, index) {
+                        $('th').css({'background-color': '#DCDCDC'});
+                        if (index % 2 == 0) {
+                            {#var tr = that.find(".layui-table-box tbody tr[data-index='" + index + "']").css("background-color", "s#DCDCDC")#}
+                        } else {
+                            var tr = that.find(".layui-table-box tbody tr[data-index='" + index + "']").css("background-color", "#F5F5F5")
+
+                        }
+                    })
+                    soulTable.render(this)
+                }
+            });
+            //头工具栏事件
+            table.on('toolbar(my_table3)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                var data = checkStatus.data;
+                switch (obj.event) {
+                    case 'add_ku':
+                        var choose = new Array();
+                        for (var i = 0; i < checkStatus.data.length; i++) {
+                            choose.push(checkStatus.data[i]['id']);
+                        }
+                        $.post("data_add_ku/", {
+                            "fkey_id":"{{fkey_id}}",
+                            "ids": JSON.stringify(choose),
+                            "my_table_name_en": "risksource"
+                        },
+                        function (data) {
+                            layer.msg('提交成功', {icon: 1});
+                            table.reload('test', {
+                                method: 'get'
+                                , where: {}
+                                , page: {
+                                    curr: 1
+                                }
+                            });
+                            location.reload();
+                        })
+                        break
+                    case 'new':
+                        // 写个异步实现提示和保存
+                        xadmin.open('新建活动', 'add/?my_table_name_en=' + '{{ my_table_name_en }}', 600, 600)
+                        break
+                    case 'delete':
+                        if (data.length == 0) {
+                            layer.alert('请选择要删除的对象');
+                        } else {
+                            layer.confirm('确认要删除吗？', function (index) {
+                                //捉到所有被选中的，发异步进行删除
+                                var id = new Array();
+                                for (var i = 0; i < checkStatus.data.length; i++) {
+                                    id.push(checkStatus.data[i]['id']);
+                                }
+                                $.post("data_del/", {
+                                        "ids": JSON.stringify(id),
+                                        "my_table_name_en": "{{ my_table_name_en }}"
+                                    },
+                                    function (data) {
+                                        layer.msg('删除成功', {icon: 1});
+                                        table.reload('test', {
+                                            method: 'get'
+                                            , where: {}
+                                            , page: {
+                                                curr: 1
+                                            }
+                                        });
+                                        location.reload();
+                                    })
+                            });
+                        }
+                        break;
+                    case 'clearFilter':
+                        soulTable.clearFilter('my_table3')
+                        break
+                    case 'export':
+                        soulTable.export('my_table3');
+                        break
+                }
+            })
+
+            //行工具栏事件
+            table.on('tool(my_table3)', function (obj) {
+                var data = obj.data; //获得当前行数据
+                switch (obj.event) {
+                    //审核人员查看
+                    case 'check':
+                        xadmin.open('活动x', '/weixianyuan_initial/detail/'+'?id='+obj.data.id, 750, 550)
+                    {#xadmin.open('任务编号' + obj.data.task_number + '：风险预测预警流程', '/task_index?id=' + obj.data.task_number + '&status=' + obj.data.exe_status, 1300, 600)#}
+                        break
+                    case 'alter':
+                        xadmin.open('编辑', '/weixianyuan_initial/alter/'+'?id='+obj.data.id+'&ac_id='+obj.data.fkey+'&role=3', 750, 550)
+                        break
+                    //各部门去查看问卷
+                    case 'check2':
+                        xadmin.open('编辑', 'data_alternew/?error_id=' + data.error_id, 750, 550)
+                        break
+                    //查看问卷对应历史
+                    case 'history':
+                        xadmin.open('编辑', 'data_alternew/?error_id=' + data.error_id, 750, 550)
+                        break
+                }
+            });
+        })
+    </script>
+    <script>
+        if('{{status_activity}}'=='部门审核中'){
+            $('#profile-tab').click();
+        };
+        if('{{status_activity}}'=='专家评审中'){
+            $('#contact-tab').click();
+        };
+    </script>
+{% endblock %}

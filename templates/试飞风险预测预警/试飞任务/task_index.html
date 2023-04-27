@@ -1,0 +1,118 @@
+{% extends 'my_base.html' %}
+
+{% block my_nav %}
+    <div class="x-nav">
+    <span class="layui-breadcrumb">
+            <a>
+              <cite>流程示意图</cite></a>
+    </span></div>
+{% endblock %}
+
+{% block my_content %}
+    <div class="layui-fluid">
+        <div class="layui-fluid">
+            <div class="layui-card" style="margin-top: 20px">
+                <div class="layui-card-body" style="">
+                    {#                    <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="">#}
+                    {#                        <i class="layui-icon layui-icon-left"></i>上一步#}
+                    {#                    </button>#}
+                    {#                    <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="float: right">#}
+                    {#                        <i class="layui-icon layui-icon-right"></i>下一步#}
+                    {#                    </button>#}
+                    <div id="main" style="height:500px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block my_script %}
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        function calUrl(name) {
+            if (name === "预先准备")
+                return "/risk_notice/"
+            else if (name === "直接准备")
+                return "predict/beforefly/"
+            else if (name === "飞机放飞")
+                return "predict/duringfly/"
+            else if (name === "试飞执行")
+                return "predict/duringfly/"
+            else
+                return ""
+        }
+
+        var chartDom = document.getElementById('main');
+        var myChart = echarts.init(chartDom);
+
+
+        $.getJSON("/static/file/task_flow.json", function (data) {
+            var option;
+            // 变更颜色
+            var color_array = ["#3874cb","#eef2f6"];
+            var flow_data = [];
+            var status = '{{ status }}';
+            console.log(status)
+            for(let k of data.data.data){
+                if(k.name===status && k.name != "开始" && k.name != "结束"){
+                    k.colors = color_array[0]
+                }
+                if(k.name!=status && k.name != "开始" && k.name != "结束"){
+                    k.colors = color_array[1]
+                }
+                flow_data.push(k)
+            }
+            console.log(flow_data)
+            option = {
+                title: {
+                    text: ''
+                },
+                tooltip: {},
+                animationDurationUpdate: 1500,
+                animationEasingUpdate: 'quinticInOut',
+                series: [
+                    {
+                        type: 'graph',
+                        layout: 'none',
+                        symbolSize: 50,
+                        roam: "move",
+                        label: {
+                            fontStyle: "oblique",
+                            show: true,
+                            color: "rgba(24, 23, 23, 1)",
+                            fontSize: 15
+                        },
+                        edgeSymbol: ['circle', 'arrow'],
+                        edgeSymbolSize: [4, 10],
+                        edgeLabel: {
+                            fontSize: 20
+                        },
+                        data: data.data.data,
+                        // links: [],
+                        links: data.data.links,
+                        itemStyle: {
+                            normal: {
+                                color: function (params) {
+                                    return params.data.colors
+                                }
+                            }
+                        },
+                        lineStyle: {
+                            opacity: 0.9,
+                            width: 2,
+                            curveness: 0
+                        }
+                    }
+                ],
+            };
+            myChart.on('click', function (params) {
+                if (params.data.colors == "red")
+                    window.location.href = calUrl(params.data.name);
+                else
+                    {#window.location.href = ""#}
+                    window.location.href = calUrl(params.data.name);
+            });
+            myChart.setOption(option);
+        })
+    </script>
+{% endblock %}

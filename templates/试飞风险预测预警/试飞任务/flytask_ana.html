@@ -1,0 +1,558 @@
+{% extends "my_base.html" %}
+
+{% block my_title %}
+    <title>质量评价趋势分析</title>
+{% endblock %}
+
+{% block my_content %}
+    <div class="layui-fluid">
+
+        {#        <div class="layui-card" style="margin-top: 20px">#}
+        {#            <div class="layui-card-body" style="width: 1200px;">#}
+        {#                <div id="stacking-chart" style="width: 1200px;height:400px;"></div>#}
+        {#            </div>#}
+        {#        </div>#}
+
+        <div class="layui-card" style="margin-top: 20px">
+            <div class="layui-card-body">
+                <div>
+                    <label class="layui-form-label" style="width: 120px;font-style: italic;color: royalblue">选择展示字段:</label>
+                <select type="text" id="my_select" name="my_select" required=""
+                        lay-verify="required" style="width: 20%"
+                        autocomplete="off" class="layui-input"></select>
+                </div>
+                <br>
+                <div id="pie-chart" style="height:400px;"></div>
+                <div id="radar-chart" style="height:400px;"></div>
+                <div id="chartDom3" style="height:600px;"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block my_script %}
+    <script>
+        function addListOption(selectId, listItems) {
+            // 循环遍历数组
+            for (var item in listItems) {
+                // 获取下拉列表框对象
+                var selectID = document.getElementById(selectId);
+                // 创建option元素
+                var option = document.createElement("option");
+                // 添加节点
+                option.appendChild(document.createTextNode(listItems[item]));
+                // 设置value属性
+                option.setAttribute("value", listItems[item]);
+                // 将option添加到下拉列表框中
+                selectID.appendChild(option);
+            }
+        }
+
+        var pie_items = {{ pie_items|safe }};
+        addListOption('my_select', pie_items);
+
+
+    </script>
+    <script>
+        var pie_chart = echarts.init(document.getElementById('pie-chart'));
+        var outdatas = {{ outdatas|safe }};
+        option = {
+            title: [{
+                text: '分类数据饼状图',
+                left: 'left'
+            },
+            ],
+            legend: {
+                top: 'top'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            series: [
+                {
+                    name: '',
+                    type: 'pie',
+                    radius: [20, 140],
+                    {#center: ['25%', '50%'],#}
+                    roseType: 'area',
+                    itemStyle: {
+                        borderRadius: 5
+                    },
+                    data: outdatas[pie_items[0]]
+                },
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        pie_chart.setOption(option);
+
+
+        $('#my_select').change(function () {
+            var selected = $(this).children('option:selected').val()
+
+            var opti2 = pie_chart.getOption()
+            opti2.series = [{
+                data: outdatas[selected]
+            }]
+            pie_chart.setOption(opti2)
+        })
+
+    </script>
+    <script>
+        var chartDom = document.getElementById('radar-chart');
+        var radarChart = echarts.init(chartDom);
+        var option2;
+        option2 = {
+            title: {
+                text: 'Multiple Radar'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                left: 'center',
+                data: [
+                    'A Software',
+                    'A Phone',
+                    'Another Phone',
+                    'Precipitation',
+                    'Evaporation'
+                ]
+            },
+            radar: [
+                {
+                    indicator: [
+                        {text: 'Brand', max: 100},
+                        {text: 'Content', max: 100},
+                        {text: 'Usability', max: 100},
+                        {text: 'Function', max: 100}
+                    ],
+                    center: ['25%', '40%'],
+                    radius: 80
+                },
+                {
+                    indicator: [
+                        {text: 'Look', max: 100},
+                        {text: 'Photo', max: 100},
+                        {text: 'System', max: 100},
+                        {text: 'Performance', max: 100},
+                        {text: 'Screen', max: 100}
+                    ],
+                    radius: 80,
+                    center: ['50%', '60%']
+                },
+                {
+                    indicator: (function () {
+                        var res = [];
+                        for (var i = 1; i <= 12; i++) {
+                            res.push({text: i + '月', max: 100});
+                        }
+                        return res;
+                    })(),
+                    center: ['75%', '40%'],
+                    radius: 80
+                }
+            ],
+            series: [
+                {
+                    type: 'radar',   //折线图
+                    data: ['100', '112', '96', '123']
+                },
+                {
+                    type: 'radar',
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    areaStyle: {},
+                    data: [
+                        {
+                            value: [60, 73, 85, 40],
+                            name: 'A Software'
+                        }
+                    ]
+                },
+                {
+                    type: 'radar',
+                    radarIndex: 1,
+                    areaStyle: {},
+                    data: [
+                        {
+                            value: [85, 90, 90, 95, 95],
+                            name: 'A Phone'
+                        },
+                        {
+                            value: [95, 80, 95, 90, 93],
+                            name: 'Another Phone'
+                        }
+                    ]
+                },
+                {
+                    type: 'radar',
+                    radarIndex: 2,
+                    areaStyle: {},
+                    data: [
+                        {
+                            name: 'Precipitation',
+                            value: [
+                                2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 75.6, 82.2, 48.7, 18.8, 6.0, 2.3
+                            ]
+                        },
+                        {
+                            name: 'Evaporation',
+                            value: [
+                                2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 35.6, 62.2, 32.6, 20.0, 6.4, 3.3
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        option2 && radarChart.setOption(option2);
+
+        var chartDom3 = document.getElementById('chartDom3');
+        var comchart = echarts.init(chartDom3);
+        var option3 = {
+        {#backgroundColor: "#404A59",#}
+        color: ['#4169E1', '#2E8B57', '#ec4863'],
+
+        title: [{
+            text: '组合图',
+            left: '0%',
+            top: '6%',
+            {#textStyle: {color: '#ffd285' }#}
+        }],
+        tooltip: {
+            /*trigger: 'item',
+            formatter: "{a} <br/>{b} : {c}"
+            formatter: function(params) {
+                //return params.seriesType
+                //return params.name+':'+params.value
+            }*/
+        },
+        legend: {
+            x: '30%',
+            bottom: '1%',
+            {#textStyle: {                color: '#ffd285',            },#}
+            data: ['郑州', '永城', '新乡']
+        },
+        radar: {
+            // shape: 'circle',
+            indicator: [{
+                name: '销售',
+                max: 6500
+            }, {
+                name: '管理',
+                max: 16000
+            }, {
+                name: '信息技术',
+                max: 30000
+            }, {
+                name: '客服',
+                max: 38000
+            }, {
+                name: '研发',
+                max: 52000
+            }, {
+                name: '市场',
+                max: 25000
+            }],
+            center: ['83%', '85%'],
+            radius: 80
+        },
+        grid: {
+            left: '10%',
+            right: '35%',
+            top: '16%',
+            bottom: '6%',
+            containLabel: true
+        },
+        toolbox: {
+            "show": false,
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            "axisLine": {
+                lineStyle: {
+                    color: '#c0576d'
+                }
+            },
+            "axisTick": {
+                "show": false
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ffd285'
+                }
+            },
+            boundaryGap: true, //false时X轴从0开始
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        },
+        yAxis: {
+            "axisLine": {
+                lineStyle: {
+                    color: '#c0576d'
+                }
+            },
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    color: '#c0576d'
+                }
+            },
+            "axisTick": {
+                "show": false
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ffd285'
+                }
+            },
+            type: 'value'
+        },
+        series: [{
+                name: '郑州',
+                smooth: true,
+                type: 'bar',
+                symbolSize: 8,
+                //symbol: 'circle',
+                data: [90, 50, 39, 50, 120, 82, 80]
+            }, {
+                name: '永城',
+                smooth: true,
+                type: 'bar',
+                symbolSize: 8,
+                //symbol: 'circle',
+                data: [70, 50, 50, 87, 90, 80, 70]
+            }, {
+                name: '新乡',
+                smooth: true,
+                type: 'bar',
+                symbolSize: 8,
+                //symbol: 'circle',
+                data: [290, 200, 20, 132, 15, 200, 90]
+            }, {
+                type: 'pie',
+                center: ['83%', '20%'],
+                radius: ['15%', '20%'],
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                label: {
+                    normal: {
+                        position: 'center'
+                    }
+                },
+                data: [{
+                    value: 335,
+                    name: '污染来源分析',
+                    itemStyle: {
+                        normal: {
+                            color: '#ffd285'
+                        }
+                    },
+                    label: {
+                        normal: {
+                            formatter: '{d} %',
+                            textStyle: {
+                                color: '#ffd285',
+                                fontSize: 20
+
+                            }
+                        }
+                    }
+                }, {
+                    value: 180,
+                    name: '占位',
+                    tooltip: {
+                        show: false
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#404A59'
+                        }
+                    },
+                    label: {
+                        normal: {
+                            textStyle: {
+                                color: '#ffd285',
+                            },
+                            formatter: '\n汽车尾气'
+                        }
+                    }
+                }]
+            }, {
+                type: 'pie',
+                center: ['83%', '50%'],
+                radius: ['15%', '20%'],
+                name: '饼图',
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                /* label: {
+                         normal: {
+                             textStyle: {
+                                 color: '#ffd285',
+                             },
+                             formatter: "{b}: {c} ({d}%)"
+                         }
+                     },*/
+                data: [{
+                    value: 335,
+                    name: '直接访问',
+                    itemStyle: {
+                        normal: {
+                            color: '#FF3300'
+                        }
+                    }
+                }, {
+                    value: 310,
+                    name: '邮件营销',
+                    itemStyle: {
+                        normal: {
+                            color: '#FFFF00'
+                        }
+                    }
+                }, {
+                    value: 234,
+                    name: '联盟广告',
+                    itemStyle: {
+                        normal: {
+                            color: '#00FF00'
+                        }
+                    }
+                }, {
+                    value: 135,
+                    name: '视频广告',
+                    itemStyle: {
+                        normal: {
+                            color: '#1E90FF'
+                        }
+                    }
+                }, {
+                    value: 1548,
+                    name: '搜索引擎',
+                    itemStyle: {
+                        normal: {
+                            color: '#ADFF2F'
+                        }
+                    }
+                }]
+            },
+
+            {
+                type: 'radar',
+                center: ['83%', '85%'],
+                //radius: ['15%', '20%'],
+                //name: '雷达',
+                tooltip: {
+
+                },
+                data: [{
+                    value: [4300, 10000, 28000, 35000, 50000, 19000],
+                    name: '预算分配'
+                }, {
+                    value: [5000, 14000, 28000, 31000, 42000, 21000],
+                    name: '实际开销'
+                }]
+            }
+        ]}
+        option3 && comchart.setOption(option3);
+    </script>
+    {#    <script>#}
+    {#        var stacking_chart = echarts.init(document.getElementById('stacking-chart'));#}
+    {#        var checks_stacking = {{ checks_stacking|safe }};#}
+    {#        var sc_series = []#}
+    {#        for (var k in checks_stacking) {#}
+    {#            sc_series.push({#}
+    {#                name: k,#}
+    {#                type: 'line',#}
+    {#                emphasis: {#}
+    {#                    focus: 'series'#}
+    {#                },#}
+    {#                data: checks_stacking[k]#}
+    {#            })#}
+    {#        }#}
+    {#        #}
+    {#        var option0;#}
+    {#        option0 = {#}
+    {#            title: {#}
+    {#                text: '数据统计折线图'#}
+    {#            },#}
+    {#            tooltip: {#}
+    {#                trigger: 'axis',#}
+    {#            },#}
+    {#            legend: {#}
+    {#                data: Object.keys(checks_stacking),#}
+    {#            },#}
+    {#            toolbox: {#}
+    {#                feature: {#}
+    {#                    mark: {show: true},#}
+    {#                    dataView: {show: true, readOnly: false},#}
+    {#                    restore: {show: true},#}
+    {#                    saveAsImage: {show: true},#}
+    {#                    magicType: {//动态类型切换#}
+    {#                        type: ['line', 'bar']#}
+    {#                    },#}
+    {#                },#}
+    {##}
+    {#            },#}
+    {#            grid: {#}
+    {#                left: '3%',#}
+    {#                right: '4%',#}
+    {#                bottom: '3%',#}
+    {#                containLabel: true#}
+    {#            },#}
+    {#            xAxis: [#}
+    {#                {#}
+    {#                    type: 'category',#}
+    {#                    boundaryGap: false,#}
+    {#                    data: times#}
+    {#                }#}
+    {#            ],#}
+    {#            yAxis: [#}
+    {#                {#}
+    {#                    type: 'value'#}
+    {#                }#}
+    {#            ],#}
+    {#            series: sc_series,#}
+    {#        };#}
+    {#        stacking_chart.setOption(option0);#}
+    {#    </script>#}
+    <script>
+        layui.use(['laydate', 'form'], function () {
+            var laydate = layui.laydate;
+            var form = layui.form;
+
+
+            // 监听全选
+            form.on('checkbox(checkall)', function (data) {
+
+                if (data.elem.checked) {
+                    $('tbody input').prop('checked', true);
+                } else {
+                    $('tbody input').prop('checked', false);
+                }
+                form.render('checkbox');
+            });
+
+
+        });
+    </script>
+
+{% endblock %}

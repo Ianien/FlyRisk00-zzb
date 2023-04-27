@@ -1,0 +1,183 @@
+{
+  "msg": "ok",
+  "code": 200,
+  "data": {
+    "data": [
+      {
+        "name": "开始",
+        "x": 0,
+        "y": 0,
+        "symbol": "roundRect",
+        "symbolSize": 100,
+        "colors": "brown",
+        "isSelect": 1
+      },
+      {
+        "name": "任务单制定协调",
+        "x": 250,
+        "y": 0,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "grey",
+        "isSelect": 0
+      },
+      {
+        "name": "任务单制定",
+        "x": 250,
+        "y": 200,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "grey",
+        "isSelect": 0
+      },
+      {
+        "name": "任务下达",
+        "x": 250,
+        "y": 400,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "grey",
+        "isSelect": 0
+      },
+      {
+        "name": "试飞计划制定协调",
+        "x": 500,
+        "y": 0,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "grey",
+        "isSelect": 0
+      },
+      {
+        "name": "试飞计划制定",
+        "x": 500,
+        "y": 200,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "grey",
+        "isSelect": 0
+      },
+      {
+        "name": "预先准备",
+        "x": 500,
+        "y": 400,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "grey",
+        "isSelect": 0
+      },
+      {
+        "name": "直接准备",
+        "x": 750,
+        "y": 0,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "grey"
+      },
+      {
+        "name": "飞机放飞",
+        "x": 750,
+        "y": 200,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "red"
+      },
+      {
+        "name": "试飞执行",
+        "x": 750,
+        "y": 400,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "grey"
+      },
+      {
+        "name": "飞行结束",
+        "x": 1000,
+        "y": 0,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "grey"
+      },
+      {
+        "name": "试飞后讲评",
+        "x": 1000,
+        "y": 200,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "grey"
+      },
+      {
+        "name": "飞行后检查",
+        "x": 1000,
+        "y": 400,
+        "symbol": "roundRect",
+        "symbolSize": 125,
+        "colors": "grey"
+      },
+      {
+        "name": "结束",
+        "x": 1250,
+        "y": 400,
+        "symbol": "roundRect",
+        "symbolSize": 100,
+        "colors": "brown"
+      }
+    ],
+    "links": [
+      {
+        "source": 0,
+        "target": 1
+      },
+      {
+        "source": 1,
+        "target": 2
+      },
+      {
+        "source": 2,
+        "target": 3
+      },
+      {
+        "source": 3,
+        "target": 4
+      },
+      {
+        "source": 4,
+        "target": 5
+      },
+      {
+        "source": 5,
+        "target": 6
+      },
+      {
+        "source": 6,
+        "target": 7
+      },
+      {
+        "source": 7,
+        "target": 8
+      },
+      {
+        "source": 8,
+        "target": 9
+      },
+      {
+        "source": 9,
+        "target": 10
+      },
+      {
+        "source": 10,
+        "target": 11
+      },
+      {
+        "source": 11,
+        "target": 12
+      },
+      {
+        "source": 12,
+        "target": 13
+      }
+    ],
+    "description": "",
+    "title": ""
+  }
+}

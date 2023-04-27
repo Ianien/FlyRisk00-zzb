@@ -1,0 +1,155 @@
+{% extends 'my_base.html' %}
+{% load static %}
+{% block my_css %}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/horizontal-timeline.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/blue.css' %}" rel="stylesheet">
+    <style type="text/css">.jqstooltip {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        visibility: hidden;
+        background: rgb(0, 0, 0) ;
+        background-color: rgba(0, 0, 0, 0.6);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+        -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+        color: white;
+        font: 10px arial, san serif;
+        text-align: left;
+        white-space: nowrap;
+        padding: 5px;
+        border: 1px solid white;
+        z-index: 10000;
+    }
+
+    .jqsfield {
+        color: white;
+        font: 10px arial, san serif;
+        text-align: left;
+    }</style>
+{% endblock %}
+
+{% block my_nav %}
+    <div class="x-nav">
+    <span class="layui-breadcrumb">
+            <a href="/task_index/">流程示意图</a>
+            <a>
+              <cite>预先准备</cite></a>
+    </span></div>
+{% endblock %}
+
+{% block my_content %}
+    <div class="container-fluid">
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="" id="before">
+            <i class="layui-icon layui-icon-left"></i>上一步
+        </button>
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="float: right" id="next">
+            <i class="layui-icon layui-icon-right"></i>下一步
+        </button>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <section class="cd-horizontal-timeline loaded" style="margin-top:0px;">
+                            <div class="timeline" style="max-width:3000px;">
+                                <div class="events-wrapper">
+                                    <div class="events" style="width: 1800px;">
+                                        <ol>
+                                            <li><a class="selected" id="part1" href="#0" data-date="16/01/2014"
+                                                   style="left: 120px;">试飞任务导入</a></li>
+                                            <li><a id="part2" href="#0" data-date="28/02/2014" style="left: 300px;">科目风险识别</a>
+                                            </li>
+                                            <li><a id="part3" href="#0" data-date="20/04/2014" style="left: 480px;">试飞风险评估</a>
+                                            </li>
+                                            <li><a id="part4" href="#0" data-date="10/06/2014" style="left: 600px;">危险源识别</a>
+                                            </li>
+                                            <li><a id="part5" href="#0" data-date="01/08/2014"
+                                                   style="left: 820px;">风险等级</a></li>
+                                            <li><a id="part6" href="#0" data-date="20/09/2014" style="left: 1020px;">试飞风险评估单</a>
+                                            </li>
+                                            <li><a href="#0" data-date="15/10/2014"
+                                                   style="left: 1100px;display:none;"></a></li>
+                                            <li><a href="#0" data-date="01/11/2014"
+                                                   style="left: 1200px;display:none;"></a></li>
+                                            <li><a id="part7" href="#0" data-date="10/12/2014"
+                                                   style="left: 1380px;">结束</a></li>
+                                            <li><a href="#0" data-date="19/01/2015"
+                                                   style="left: 1500px;display:none;"></a></li>
+                                            <li><a href="#0" data-date="03/03/2015"
+                                                   style="left: 1680px;display:none;"></a></li>
+                                        </ol>
+                                        <span class="filling-line" aria-hidden="true"
+                                              style="transform: scaleX(0.0840126);"></span>
+                                    </div>
+                                </div>
+                                <ul class="cd-timeline-navigation" style="max-width:2000px;">
+                                    <li><a href="#0" class="prev inactive">Prev</a></li>
+                                    <li><a href="#0" class="next">Next</a></li>
+                                </ul>
+                            </div>
+                            <div class="events-content" style="min-height:1000px;">
+                                <ol>
+                                    <li class="selected" data-date="16/01/2014" style="padding:0px;text-align:center">
+                                        <h1>
+                                            试飞任务导入
+                                        </h1>
+                                    </li>
+                                    <li data-date="28/02/2014" style="text-align:center">
+                                        <h1>
+                                            科目风险识别
+                                        </h1>
+                                    </li>
+                                    <li data-date="20/04/2014" style="text-align:center">
+                                        <h1>
+                                            试飞风险评估
+                                        </h1>
+                                    </li>
+                                    <li data-date="10/06/2014" style="text-align:center">
+                                        <h1>
+                                            危险源识别
+                                        </h1>
+                                    </li>
+                                    <li data-date="01/08/2014" style="text-align:center">
+                                        <h1>
+                                            风险等级
+                                        </h1>
+                                    </li>
+                                    <li data-date="20/09/2014" style="text-align:center">
+                                        <h1>
+                                            试飞风险评估单
+                                        </h1>
+                                    </li>
+                                    <li data-date="10/12/2014" style="text-align:center">
+                                        <h1>
+                                            结束
+                                        </h1>
+                                    </li>
+                                </ol>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block my_script %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+    <script src="{% static 'js/waves.js' %}"></script>
+    <script src="{% static 'js/sidebarmenu.js' %}"></script>
+    <script src="{% static 'js/sticky-kit.min.js' %}"></script>
+    <script src="{% static 'js/jquery.sparkline.min.js' %}"></script>
+    <script src="{% static 'js/custom.min.js' %}"></script>
+    <script src="{% static 'js/horizontal-timeline.js' %}"></script>
+    <script>
+        $("#next").click(function () {
+            window.location.href = '/task_index/predict/beforefly/'
+        })
+    </script>
+
+{% endblock %}

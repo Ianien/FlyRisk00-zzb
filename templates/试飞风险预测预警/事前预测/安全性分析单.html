@@ -1,0 +1,98 @@
+{% extends 'my_base.html' %}
+
+{% block my_nav %}
+    <<div class="x-nav">
+    <span class="layui-breadcrumb">
+            <a href="/task_index/">流程示意图</a>
+            <a>
+              <cite>直接准备</cite></a>
+    </span></div>
+{% endblock %}
+
+{% block my_content %}
+    <div class="layui-fluid">
+    <div class="none">
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="" id="before">
+            <i class="layui-icon layui-icon-left"></i>上一步
+        </button>
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="float: right" id="next">
+            <i class="layui-icon layui-icon-right"></i>下一步
+        </button>
+    </div>
+        <div class="layui-fluid" style="background-color:#FFEEE1">
+            <div class="layui-card" style="margin-top: 20px;background-color:#FFEEE1">
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                    <legend align="center" style="font-size: xxx-large;font-weight: bolder">安全性分析单</legend>
+                </fieldset>
+                <div>
+                    <div class="layui-inline" style="width: 20%;margin-left: 100px">
+                        <label class="layui-form-label" style="width: 100px;">任务编号</label>
+                        <div class="layui-input-inline">
+                            <input name="r1" lay-verify="" autocomplete="off"
+                                   class="layui-input" placeholder="xxx" readonly="true">
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="width: 20%">
+                        <label class="layui-form-label" style="width: 100px;">任务场景</label>
+                        <div class="layui-input-inline">
+                            <input name="r2" lay-verify="" autocomplete="off"
+                                   class="layui-input" placeholder="xxx" readonly="true">
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="width: 20%">
+                        <label class="layui-form-label" style="width: 100px;">试飞机号</label>
+                        <div class="layui-input-inline">
+                            <input name="r3" lay-verify="" autocomplete="off"
+                                   class="layui-input" placeholder="xxx" readonly="true">
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="width: 20%">
+                        <label class="layui-form-label" style="width: 100px;">安全性评分</label>
+                        <div class="layui-input-inline">
+                            <input name="r4" lay-verify="" autocomplete="off"
+                                   class="layui-input" placeholder="xxx" readonly="true">
+                        </div>
+                    </div>
+                </div>
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                    <legend align="center" style="font-size: xx-large;font-weight: bold;background-color:#E6FFF5">科目危害</legend>
+                </fieldset>
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th lay-data="{width:150}" style="text-align: center">危害编号</th>
+                        <th lay-data="{width:150}" style="text-align: center">危害名称</th>
+                        <th lay-data="{align:'center'}" style="text-align: center">危害等级</th>
+                        <th lay-data="{align:'center'}" style="text-align: center">预测等级</th>
+                        <th lay-data="{align:'center'}" style="text-align: center">危害后果</th>
+                        <th lay-data="{align:'center'}" style="text-align: center">缓解措施</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for x in my_table %}
+                        <tr>
+                            <td>{{ x.c1 }}</td>
+                            <td>{{ x.c2 }}</td>
+                            <td>{{ x.c3 }}</td>
+                            <td>{{ x.c4 }}</td>
+                            <td>{{ x.c5 }}</td>
+                            <td>{{ x.c6 }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block my_script %}
+    <script>
+        $("#next").click(function (){
+            window.location.href = '/task_index/predict/duringfly/'
+        })
+        $("#before").click(function (){
+            window.location.href = '/risk_notice/'
+        })
+    </script>
+{% endblock %}

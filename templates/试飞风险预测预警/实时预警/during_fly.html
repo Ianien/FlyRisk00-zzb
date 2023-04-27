@@ -1,0 +1,781 @@
+{% extends 'my_base.html' %}
+
+{% block my_nav %}
+    <span class="layui-breadcrumb">
+            <a href="/task_index/">流程示意图</a>
+            <a>
+              <cite>飞机放飞&试飞执行</cite></a>
+          </span>
+{% endblock %}
+
+{% block my_content %}
+    <style>
+    .tr {
+          will-change: transform;
+        }
+        .layui-card-body{
+            will-change: transform;
+        }
+
+    .div {
+  height: 200px;
+  overflow-y: scroll;
+}
+    </style>
+    <div class="layui-fluid">
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="" id="before">
+            <i class="layui-icon layui-icon-left"></i>上一步
+        </button>
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="float: right">
+            <i class="layui-icon layui-icon-right"></i>下一步
+        </button>
+         <div class="layui-row">
+             <div class="layui-row grid-demo">
+                 <div class="layui-col-md8">
+                     <div class="grid-demo grid-demo-bg1">
+                            <div class="layui-card">
+                                <div class="layui-card-body ">
+        {#                             <blockquote class="layui-elem-quote">#}
+        {#                                特别声明：ECharts，一个纯 Javascript 的图表库，可以流畅的运行在 PC 和移动设备上，兼容当前绝大部分浏览器（IE8/9/10/11，Chrome，Firefox，Safari等），底层依赖轻量级的 Canvas 类库 ZRender，提供直观，生动，可交互，可高度个性化定制的数据可视化图表。如需使用或者详细更多案例可以访问官网 <a href="http://echarts.baidu.com/" style="color:red">ECharts</a>。 x-admin不承担任何版权问题。#}
+        {#                            </blockquote>#}
+                                    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                                    <div id="main" style="width:100%;height:500px;"></div>
+
+                                </div>
+                            </div>
+                        </div>
+                 </div>{##监控图##}
+                 <div class="layui-col-md4">
+                    <div class="grid-demo grid-demo-bg2">
+                             <div class="layui-card">
+
+                                <div class="layui-card-body" style="min-height: 250px;">
+                                <div id="main4" class="layui-col-sm12" style="height: 250px;"></div>
+
+                                     <div class="layui-card-body " style="height: 250px;width: auto;overflow:auto;">
+                                         <label class="layui-form-label" style="width: auto;">高风险预警记录</label>
+                                            <table class="layui-table" lay-filter="my_table_2" id="my_table_2">
+                                            </table>
+                                        </div>
+
+
+                            </div>
+
+                            </div>
+                        </div>
+                 </div>
+                 <div class="layui-col-md12">
+
+                        <div class="layui-card">
+
+                                <div class="layui-card-body " style="height: 300px;width: auto;overflow:auto;">
+
+                                    <table class="layui-table" lay-filter="my_table_3" id="my_table_3">
+                                    </table>
+                                </div>
+                         </div>
+                 </div>
+                 <div class="layui-col-md12">
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn" id="upload-btn">选择文件</button> <!-- 添加一个按钮 -->
+                            <input type="file" id="file-input" accept=".csv" style="display: none;"> <!-- 隐藏原始的文件选择框 -->
+                        </div>
+                        <div class="layui-card">
+
+                                <div class="layui-card-body " style="height: 500px;width: auto;overflow:auto;">
+
+                                    <table class="layui-table" lay-filter="my_table" id="my_table">
+                                    </table>
+                                </div>
+                         </div>
+                 </div>
+                 <div class="layui-col-md12">
+                    <div class="layui-fluid">
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <form class="layui-form layui-form-pane" action="" method="post">
+                                    <div class="layui-inline">
+                                              <label class="layui-form-label" style="width: 200px;">实时参数</label>
+                                                <div class="layui-input-inline">
+                                                  <select name="airport" lay-verify="">
+                                                      <option value="飞行速度">飞行速度</option>
+                                                      <option value="舱门开关">舱门开关</option>
+                                                      <option value="EICAS告警">EICAS告警</option>
+                                                      <option value="液压压力">液压压力</option>
+                                                      <option value="能见度">能见度</option>
+                                                   </select>
+                                                </div>
+                                            </div>
+                                </form>
+                            <div class="layui-card-body" style="min-height: 280px;">
+                                <div id="line-chart" class="layui-col-sm12" style="height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                 </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_script %}
+<script>
+        layui.config({
+            base: '/static/modules/soulTable/',   // 第三方模块所在目录
+            version: 'v1.6.4' // 插件版本号
+        }).extend({
+            soulTable: 'soulTable',
+        });
+        var tableFilter;
+        layui.use('tableFilter', function () {
+            tableFilter = layui.tableFilter
+        })
+        {#$("#checkall").prop ("checked", true );#}
+    </script>
+    <script>
+    //初始化表格
+    layui.use(['table', 'soulTable'], function () {
+      var table = layui.table,
+          soulTable = layui.soulTable;
+
+      //渲染表格
+      table.render({
+      height:500,
+      width:1500,
+    elem: '#my_table',
+       limit:10,
+      page: true,
+        cols: [[ //表头
+    {field: '阶段', title: '阶段', sort: true}
+    ,{field: '舱门开关', title: '舱门开关'}
+    ,{field: 'EICAS告警', title: 'EICAS告警'}
+    ,{field: '液压压力', title: '液压压力'}
+    ,{field: '能见度', title: '能见度'}
+    ,{field: '飞行速度', title: '飞行速度'}
+    ,{field: 'q_1', title: 'q_1'}
+    ,{field: 'q_2', title: 'q_2'}
+    ,{field: 'q_3', title: 'q_3'}
+    ,{field: 'q_4', title: 'q_4'}
+    ,{field: 'v2_g', title: 'v2_g'}
+    ,{field: '危害等级', title: '危害等级'}
+    ,{field: '判断方式', title: '判断方式'}
+    ,{field: '时间', title: '时间'}
+  ]]
+});
+
+    }
+    )
+
+
+        //初始化一个折线图
+      layui.use(['table'], function () {
+          // 获取table对象
+          var table = layui.table;
+          // 获取jquery对象
+          var $ = layui.jquery;
+          // 初始化echarts实例
+          var lineChart = echarts.init(document.getElementById('line-chart'));
+          // 设置折线图的配置项
+          var option = {
+              title: {
+                  text: '折线图示例'
+              },
+              tooltip: {
+                  trigger: 'axis'
+              },
+              legend: {
+                  data: []
+              },
+              xAxis: {
+                  type: 'category',
+                  data: []
+              },
+              yAxis: {
+                  type: 'value'
+              },
+              series: []
+          };
+
+      })
+            // 监听窗口大小变化，调用resize方法，使折线图适应屏幕
+
+
+
+        layui.use(['form', 'jquery'], function () {
+                var form = layui.form;
+                var $ = layui.jquery;
+
+                //监听select选择
+                form.on('select(select)', function (data) {
+                    var value = data.value;
+                    $.ajax({
+                        url: 'getData/',
+                        type: 'POST',
+                        data: {value: value},
+                        success: function (res) {
+                            console.log(res);
+                        }
+                    });
+                });
+
+                 $('#select').trigger('change');
+            });
+
+        // 读取csv文件并转换为数组
+        function csvToArray(csv) {
+            var rows = csv.split("\n");
+            var result = [];
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].split(",");
+                if (cells.length > 1) {
+                    result.push(cells);
+                }
+            }
+            return result;
+        }
+
+        // 将数组的一行转换为html表格的一行
+        function arrayToObject(arr1,arr2) {
+                var obj = {};
+                for (var i = 0; i < arr1.length; i++) {
+                    var key = arr1[i].replace("\r", "");
+                    var value = arr2[i].replace("\r", "");
+                    obj[key] = value;
+                }
+
+          return obj;
+        }
+
+        // 监听文件选择事件
+        $("#upload-btn").on("click", function() { // 点击按钮时
+            $("#file-input").click(); // 触发文件选择框的点击事件
+        });
+
+        $("#file-input").on("change", function() {
+            var file = this.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var csv = e.target.result;
+                    var array = csvToArray(csv);
+                    var array1=array[0];
+                    var my_table_2_data=[];
+                    var my_table_3_data=[];
+                    var index = 1; // 记录当前显示的行数
+                    var interval = setInterval(function updateTable() { // 每隔0.02秒执行一次
+
+                        if (index < array.length) { // 如果还有未显示的行
+                            var row = array[index]; // 获取当前行
+                            var data=arrayToObject(array1,row)
+                            {#console.log(data)#}
+                             $.ajax({
+                                url: "/process-column/",
+                                type: "POST",
+                                data: JSON.stringify(data),
+                                contentType: "application/json",
+                                success: function (response) {
+                                    // 处理响应
+                                },
+                                error: function (response) {
+                                    // 处理错误
+                                }
+                            });
+                            index++; // 索引加一
+                            layui.use(['table'], function () {//更新表格数据
+                                var table = layui.table;
+                                 var lineChart = echarts.init(document.getElementById('line-chart'));
+                              table.render({
+                                   elem: '#my_table',
+                                   url: "/process-column/",
+                                   method: 'get', //请求方式
+                                  cols:  [[ //表头
+                                        {field: '阶段', title: '阶段', sort: true}
+                                        ,{field: '舱门开关', title: '舱门开关'}
+                                        ,{field: 'EICAS告警', title: 'EICAS告警'}
+                                        ,{field: '液压压力', title: '液压压力'}
+                                        ,{field: '能见度', title: '能见度'}
+                                        ,{field: '飞行速度', title: '飞行速度'}
+                                        ,{field: 'q_1', title: 'q_1'}
+                                        ,{field: 'q_2', title: 'q_2'}
+                                        ,{field: 'q_3', title: 'q_3'}
+                                        ,{field: 'q_4', title: 'q_4'}
+                                        ,{field: 'v2_g', title: 'v2_g'}
+                                        ,{field: '危害等级', title: '危害等级'}
+                                        ,{field: '判断方式', title: '判断方式'}
+                                        ,{field: '时间', title: '时间'}
+                                        ,{field: '危害', title: '危害'}
+                                        ,{field: '缓解措施', title: '缓解措施'}
+                                      ]],
+                                  done: function(res, curr, count){
+                                //如果get到数据，res就是返回的数据对象，你可以在这里对数据进行处理
+                                {#console.log(JSON.stringify(res));#}
+
+                                        //更新警报图
+                                        var myChart = echarts.init(document.getElementById('main4'));
+                                        var dict_node={'低':20,'中':50,'高':88};
+                                        var array=res['data'];
+                                        if (array.length>1) {
+                                            {#console.log(dict_node[array[array.length - 1]['危害等级']]);#}
+                                             acue_data=array[array.length - 1]
+                                            // 指定图表的配置项和数据
+                                            var option = {
+                                                tooltip: {
+                                                    formatter: "{a} <br/>{b} : {c}%"
+                                                },
+                                                series: [
+                                                    {
+                                                        name: '硬盘使用量',
+                                                        type: 'gauge',
+                                                        title: '危害等级',
+                                                        detail: {formatter: array[array.length - 1]['危害等级']},
+                                                        data: [{value: dict_node[array[array.length - 1]['危害等级']], name: "危害等级"}]
+                                                    }
+                                                ]
+                                            };
+                                            // 使用刚指定的配置项和数据显示图表。
+                                            myChart.setOption(option);
+                                        }
+
+                                      //如果出现高风险则更新表格
+
+                                      if (acue_data['危害等级']=="高"){
+                                          my_table_2_data.push({"危害":acue_data["危害"],"时间":acue_data['时间']});
+                                          console.log(acue_data['危害等级']);
+                                          table.render({
+                                              elem:"#my_table_2",
+                                              data:my_table_2_data,
+                                              cols:[[
+                                                  {field:'危害', title:'危害'},
+                                                  {field:"时间",title: "时间"}
+                                              ]],
+                                              title:"高风险预警记录",
+                                          });
+                                          layer.msg({
+                                              content:acue_data["危害"]+acue_data['缓解措施'],
+                                              icon:0.2,
+
+                                          })
+                                      }
+
+                                      //只展示每次的重要数据
+                                      my_table_3_data.push({'阶段':acue_data['阶段'],'判断方式':acue_data['判断方式'] ,'危害':acue_data["危害"],'缓解措施':acue_data['缓解措施'],'时间':acue_data['时间']})
+                                      table.render({
+                                            elem:"#my_table_3",
+                                              data:my_table_3_data,
+                                             cols:[[
+                                                  {field:'阶段', title:'阶段',width:100,},
+                                                 {field:'判断方式', title:'判断方式',width:350},
+                                                  {field:'危害',title: '危害',width:200,},
+                                                  {field:'缓解措施',title: '缓解措施',width:500,},
+                                                  {field:'时间',title: '时间',width:100,},
+                                              ]],
+                                        })
+
+
+                                      //更新折线图
+                                      var option = {
+                                                title: {
+                                                    text: ''
+                                                },
+                                                tooltip: {
+                                                    trigger: 'axis'
+                                                },
+                                                legend: {
+                                                    data: []
+                                                },
+                                                xAxis: {
+                                                    type: 'category',
+                                                    data: []
+                                                },
+                                                yAxis: {
+                                                    type: 'value'
+                                                },
+                                                series: []
+                                            };
+                                      var tableData = res['data'];
+                                      {#console.log(tableData);#}
+                                    // 定义一个数组，用于存储x轴的数据
+                                    var xData = [];
+                                    // 定义一个数组，用于存储y轴的数据
+                                    var yData = [];
+                                    // 遍历表格数据，将姓名和成绩分别放入x轴和y轴的数组中
+                                    for (var i = 0; i < tableData.length; i++) {
+                                        xData.push(tableData[i]['时间']);
+                                        yData.push(tableData[i][res['data_name']]);
+                                    }
+                                        {#console.log(xData,yData);#}
+                                         option.xAxis.data = xData;
+                                        option.series.push({
+                                        name: res['data_name'],
+                                        type: 'line',
+                                        data: yData
+                                    });
+                                    option.legend.data.push(res['data_name']);
+                                    // 使用更新后的配置项重新显示折线图
+                                    lineChart.setOption(option);
+
+                              },
+                                  error: function (res) {
+                                  //定义一个回调函数来处理请求异常
+                                  console.log(res); //打印异常信息
+                                  layer.msg('请求异常，请检查后端接口'); //弹出提示信息
+                                }
+                              })
+
+                            })
+
+
+
+                        } else { // 如果已经显示完所有的行
+                            clearInterval(interval); // 停止定时器
+                        }
+                    }, 1000); // 20毫秒等于0.02秒
+
+                };
+                reader.readAsText(file,'gbk');
+            }
+        });
+
+
+    </script>
+<script type="text/javascript">
+
+
+
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        myChart.setOption({
+            series: [{
+                type: 'map',
+                map: 'china'
+            }]
+        });
+
+        // 指定图表的配置项和数据
+        var geoCoordMap = {
+            '上海': [121.4648,31.2891],
+            '东莞': [113.8953,22.901],
+            '东营': [118.7073,37.5513],
+            '中山': [113.4229,22.478],
+            '临汾': [111.4783,36.1615],
+            '临沂': [118.3118,35.2936],
+            '丹东': [124.541,40.4242],
+            '丽水': [119.5642,28.1854],
+            '乌鲁木齐': [87.9236,43.5883],
+            '佛山': [112.8955,23.1097],
+            '保定': [115.0488,39.0948],
+            '兰州': [103.5901,36.3043],
+            '包头': [110.3467,41.4899],
+            '北京': [116.4551,40.2539],
+            '北海': [109.314,21.6211],
+            '南京': [118.8062,31.9208],
+            '南宁': [108.479,23.1152],
+            '南昌': [116.0046,28.6633],
+            '南通': [121.1023,32.1625],
+            '厦门': [118.1689,24.6478],
+            '台州': [121.1353,28.6688],
+            '合肥': [117.29,32.0581],
+            '呼和浩特': [111.4124,40.4901],
+            '咸阳': [108.4131,34.8706],
+            '哈尔滨': [127.9688,45.368],
+            '唐山': [118.4766,39.6826],
+            '嘉兴': [120.9155,30.6354],
+            '大同': [113.7854,39.8035],
+            '大连': [122.2229,39.4409],
+            '天津': [117.4219,39.4189],
+            '太原': [112.3352,37.9413],
+            '威海': [121.9482,37.1393],
+            '宁波': [121.5967,29.6466],
+            '宝鸡': [107.1826,34.3433],
+            '宿迁': [118.5535,33.7775],
+            '常州': [119.4543,31.5582],
+            '广州': [113.5107,23.2196],
+            '廊坊': [116.521,39.0509],
+            '延安': [109.1052,36.4252],
+            '张家口': [115.1477,40.8527],
+            '徐州': [117.5208,34.3268],
+            '德州': [116.6858,37.2107],
+            '惠州': [114.6204,23.1647],
+            '成都': [103.9526,30.7617],
+            '扬州': [119.4653,32.8162],
+            '承德': [117.5757,41.4075],
+            '拉萨': [91.1865,30.1465],
+            '无锡': [120.3442,31.5527],
+            '日照': [119.2786,35.5023],
+            '昆明': [102.9199,25.4663],
+            '杭州': [119.5313,29.8773],
+            '枣庄': [117.323,34.8926],
+            '柳州': [109.3799,24.9774],
+            '株洲': [113.5327,27.0319],
+            '武汉': [114.3896,30.6628],
+            '汕头': [117.1692,23.3405],
+            '江门': [112.6318,22.1484],
+            '沈阳': [123.1238,42.1216],
+            '沧州': [116.8286,38.2104],
+            '河源': [114.917,23.9722],
+            '泉州': [118.3228,25.1147],
+            '泰安': [117.0264,36.0516],
+            '泰州': [120.0586,32.5525],
+            '济南': [117.1582,36.8701],
+            '济宁': [116.8286,35.3375],
+            '海口': [110.3893,19.8516],
+            '淄博': [118.0371,36.6064],
+            '淮安': [118.927,33.4039],
+            '深圳': [114.5435,22.5439],
+            '清远': [112.9175,24.3292],
+            '温州': [120.498,27.8119],
+            '渭南': [109.7864,35.0299],
+            '湖州': [119.8608,30.7782],
+            '湘潭': [112.5439,27.7075],
+            '滨州': [117.8174,37.4963],
+            '潍坊': [119.0918,36.524],
+            '烟台': [120.7397,37.5128],
+            '玉溪': [101.9312,23.8898],
+            '珠海': [113.7305,22.1155],
+            '盐城': [120.2234,33.5577],
+            '盘锦': [121.9482,41.0449],
+            '石家庄': [114.4995,38.1006],
+            '福州': [119.4543,25.9222],
+            '秦皇岛': [119.2126,40.0232],
+            '绍兴': [120.564,29.7565],
+            '聊城': [115.9167,36.4032],
+            '肇庆': [112.1265,23.5822],
+            '舟山': [122.2559,30.2234],
+            '苏州': [120.6519,31.3989],
+            '莱芜': [117.6526,36.2714],
+            '菏泽': [115.6201,35.2057],
+            '营口': [122.4316,40.4297],
+            '葫芦岛': [120.1575,40.578],
+            '衡水': [115.8838,37.7161],
+            '衢州': [118.6853,28.8666],
+            '西宁': [101.4038,36.8207],
+            '西安': [109.1162,34.2004],
+            '贵阳': [106.6992,26.7682],
+            '连云港': [119.1248,34.552],
+            '邢台': [114.8071,37.2821],
+            '邯郸': [114.4775,36.535],
+            '郑州': [113.4668,34.6234],
+            '鄂尔多斯': [108.9734,39.2487],
+            '重庆': [107.7539,30.1904],
+            '金华': [120.0037,29.1028],
+            '铜川': [109.0393,35.1947],
+            '银川': [106.3586,38.1775],
+            '镇江': [119.4763,31.9702],
+            '长春': [125.8154,44.2584],
+            '长沙': [113.0823,28.2568],
+            '长治': [112.8625,36.4746],
+            '阳泉': [113.4778,38.0951],
+            '青岛': [120.4651,36.3373],
+            '韶关': [113.7964,24.7028]
+        };
+
+        var BJData = [
+            [{name:'北京'}, {name:'上海',value:95}],
+            [{name:'北京'}, {name:'广州',value:90}],
+            [{name:'北京'}, {name:'大连',value:80}],
+            [{name:'北京'}, {name:'南宁',value:70}],
+            [{name:'北京'}, {name:'南昌',value:60}],
+            [{name:'北京'}, {name:'拉萨',value:50}],
+            [{name:'北京'}, {name:'长春',value:40}],
+            [{name:'北京'}, {name:'包头',value:30}],
+            [{name:'北京'}, {name:'重庆',value:20}],
+            [{name:'北京'}, {name:'常州',value:10}]
+        ];
+
+        var SHData = [
+            [{name:'上海'},{name:'包头',value:95}],
+            [{name:'上海'},{name:'昆明',value:90}],
+            [{name:'上海'},{name:'广州',value:80}],
+            [{name:'上海'},{name:'郑州',value:70}],
+            [{name:'上海'},{name:'长春',value:60}],
+            [{name:'上海'},{name:'重庆',value:50}],
+            [{name:'上海'},{name:'长沙',value:40}],
+            [{name:'上海'},{name:'北京',value:30}],
+            [{name:'上海'},{name:'丹东',value:20}],
+            [{name:'上海'},{name:'大连',value:10}]
+        ];
+
+        var GZData = [
+            [{name:'广州'},{name:'福州',value:95}],
+            [{name:'广州'},{name:'太原',value:90}],
+            [{name:'广州'},{name:'长春',value:80}],
+            [{name:'广州'},{name:'重庆',value:70}],
+            [{name:'广州'},{name:'西安',value:60}],
+            [{name:'广州'},{name:'成都',value:50}],
+            [{name:'广州'},{name:'常州',value:40}],
+            [{name:'广州'},{name:'北京',value:30}],
+            [{name:'广州'},{name:'北海',value:20}],
+            [{name:'广州'},{name:'海口',value:10}]
+        ];
+
+        var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
+
+        var convertData = function (data) {
+            var res = [];
+            for (var i = 0; i < data.length; i++) {
+                var dataItem = data[i];
+                var fromCoord = geoCoordMap[dataItem[0].name];
+                var toCoord = geoCoordMap[dataItem[1].name];
+                if (fromCoord && toCoord) {
+                    res.push({
+                        fromName: dataItem[0].name,
+                        toName: dataItem[1].name,
+                        coords: [fromCoord, toCoord]
+                    });
+                }
+            }
+            return res;
+        };
+
+        var color = ['#a6c84c', '#ffa022', '#46bee9'];
+        var series = [];
+        [['北京', BJData], ['上海', SHData], ['广州', GZData]].forEach(function (item, i) {
+            series.push({
+                name: item[0] + ' Top10',
+                type: 'lines',
+                zlevel: 1,
+                effect: {
+                    show: true,
+                    period: 6,
+                    trailLength: 0.7,
+                    color: '#fff',
+                    symbolSize: 3
+                },
+                lineStyle: {
+                    normal: {
+                        color: color[i],
+                        width: 0,
+                        curveness: 0.2
+                    }
+                },
+                data: convertData(item[1])
+            },
+            {
+                name: item[0] + ' Top10',
+                type: 'lines',
+                zlevel: 2,
+                effect: {
+                    show: true,
+                    period: 6,
+                    trailLength: 0,
+                    symbol: planePath,
+                    symbolSize: 15
+                },
+                lineStyle: {
+                    normal: {
+                        color: color[i],
+                        width: 1,
+                        opacity: 0.4,
+                        curveness: 0.2
+                    }
+                },
+                data: convertData(item[1])
+            },
+            {
+                name: item[0] + ' Top10',
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                zlevel: 2,
+                rippleEffect: {
+                    brushType: 'stroke'
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'right',
+                        formatter: '{b}'
+                    }
+                },
+                symbolSize: function (val) {
+                    return val[2] / 8;
+                },
+                itemStyle: {
+                    normal: {
+                        color: color[i]
+                    }
+                },
+                data: item[1].map(function (dataItem) {
+                    return {
+                        name: dataItem[1].name,
+                        value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
+                    };
+                })
+            });
+        });
+
+        option = {
+            backgroundColor: '#404a59',
+            title : {
+                text: '实时监控',
+                subtext: '',
+                left: 'center',
+                textStyle : {
+                    color: '#fff'
+                }
+            },
+            tooltip : {
+                trigger: 'item'
+            },
+            visualMap: { //图例值控制
+            min: 0,
+            max: 1,
+
+            calculable: true,
+
+            show: true,
+
+            color: ['#f44336', '#fc9700', '#ffde00', '#ffde00', '#00eaff'],
+
+            textStyle: {
+
+                color: '#fff'
+
+            }
+
+        },
+            legend: {
+                orient: 'vertical',
+                top: 'bottom',
+                left: 'right',
+                data:['北京 Top10', '上海 Top10', '广州 Top10'],
+                textStyle: {
+                    color: '#fff'
+                },
+                selectedMode: 'single'
+            },
+            geo: {
+                map: 'china',
+                label: {
+                    emphasis: {
+                        show: false
+                    }
+                },
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: '#323c48',
+                        borderColor: '#404a59'
+                    },
+                    emphasis: {
+                        areaColor: '#2a333d'
+                    }
+                }
+            },
+            series: series
+        };
+
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+<script>
+    $("#before").click(function (){
+        window.location.href = '/task_index/predict/beforefly/';
+        layer.msg("点击");
+    })
+
+</script>
+{% endblock %}

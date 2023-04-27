@@ -1,0 +1,42 @@
+{% extends 'my_base.html' %}
+
+{% block my_content %}
+<div style="margin:20px 20px 20px 20px;font-size:20px;">
+  <div class="mb-3 row">
+    <label class="col-sm-12 col-form-label">审核结果</label>
+  </div>
+    <div class="form-check form-check-inline" style="padding:15px 15px;">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="通过" style="margin-left:0px;zoom:130%;">
+        <label class="form-check-label" for="inlineRadio1">通过</label>
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="不通过" style="margin-left:0px;zoom:130%;">
+        <label class="form-check-label" for="inlineRadio2">不通过</label>
+    </div>
+  <div class="mb-3 row">
+    <label for="exampleFormControlTextarea1" class="form-label" style="padding:15px 15px;">审批意见</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" style="margin:15px 15px;"></textarea>
+  </div>
+</div>
+<div class="col-md-12 text-right" style="display: table;">
+    <div  style="display: table-cell;vertical-align: middle;">
+        <button class="btn btn-info" style="margin-right:15px;margin-bottom:15px;" onclick="submit_data()"> 提交 </button>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block my_script %}
+<script>
+    function submit_data(){
+      var data = new Array();
+      var obj = document.getElementsByName('inlineRadioOptions');
+      for(i=0;i<obj.length;i++){
+          if(obj[i].checked){
+              data.push({check1:obj[i].value})
+          }
+      };
+    data.push({text1:$('#exampleFormControlTextarea1').val()});
+    console.log(data);
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block my_title %}
+    {% endblock %}
+    <script type="text/javascript" src="{% static 'js/xlsx.full.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/china.js' %}"></script>
+
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="stylesheet" href="{% static 'css/font.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font.css' %}">
+    <link rel="stylesheet" href="{% static 'css/xadmin.css' %}">
+    <script src="{% static 'lib/layui/layui.js' %}" charset="utf-8"></script>
+    <link href="{% static 'lib/layui/css/layui.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static 'js/xadmin.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'modules/soulTable/soulTable.css' %}" media="all"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.css' %}">
+    <script type="text/javascript" src="{% static 'js/xm-select.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/font.css' %}">
+    <link rel="stylesheet" href="{% static 'css/xadmin.css' %}">
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/echarts.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/china.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.css' %}">
+    <script type="text/javascript" charset="utf8" src="{% static 'js/jquery-1.10.2.min.js' %}"></script>
+    <script type="text/javascript" charset="utf8"
+            src="{% static 'js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'js/lay-module/layuimini/miniTab.js' %}"></script>
+    <style type="text/css">
+        table {
+            text-align: center;
+        }
+    </style>
+
+    {#    <#include "../common.ftl">#}
+
+    {% block my_css %}
+    {% endblock %}
+
+</head>
+<body>
+{% block my_nav %}
+<div class="x-nav">
+{#    <a class="layui-btn layui-btn-primary" style="line-height:1.6em;margin-top:3px;float:right"#}
+{#       onclick="location.reload()" title="刷新">#}
+{#        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>#}
+</div>
+{% endblock %}
+{% block my_content %}
+{% endblock %}
+<!-- 返回顶部 -->
+<a class="back-to-top" style="display: list-item" title="返回顶部" href="#"></a>
+{#    <script type="text/javascript">#}
+<style type="text/css">
+    .back-to-top {
+        position: fixed;
+        bottom: 3em;
+        right: 3em;
+        text-decoration: none;
+        color: #EEEEEE;
+        background-color: rgba(0, 0, 0, 0.3);
+        padding: 1em;
+        display: none;
+        border-radius: 3px;
+        border: 1px solid #CCCCCC;
+        font-family: layui-icon !important;
+        font-size: 16px;
+        font-style: normal;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .back-to-top:hover {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        // 滚动窗口来判断按钮显示或隐藏
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 150) {
+                $('.back-to-top').fadeIn(100);
+            } else {
+                $('.back-to-top').fadeOut(100);
+            }
+        });
+
+        // jQuery实现动画滚动
+        $('.back-to-top').click(function (event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 500);
+        })
+    });
+
+    layui.use('form', function () {
+    })
+
+
+</script>
+{% block my_script %}
+{% endblock %}
+</body>
+</html>

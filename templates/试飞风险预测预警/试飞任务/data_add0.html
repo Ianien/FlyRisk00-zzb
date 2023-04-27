@@ -1,0 +1,129 @@
+{% extends 'my_base.html' %}
+<span class="layui-breadcrumb">
+            <a href="">任务流程图</a>
+            <a href="">演示</a>
+            <a>
+              <cite>导航元素</cite></a>
+</span>
+
+{% block my_content %}
+    <form class="layui-form layui-form-pane" action="">
+        {# 输入任务基本信息    #}
+
+        <div class="layui-form-item" pane>
+            <label class="layui-form-label">任务编号</label>
+            <div class="layui-input-block">
+                <input type="text" id="id" name="task_id" placeholder="请输入任务编号"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">任务场景</label>
+            <div class="layui-input-block">
+                <select id="risk_level" name="task_scera" lay-search="">
+                    <option value=""></option>
+                    <option value="0">森林灭火</option>
+                    <option value="1">水上救援</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">飞机型号</label>
+            <div class="layui-input-block">
+                <input type="text" id="machine_number" name="air_id"
+                       placeholder="请输入飞机型号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        {#             试飞科目#}
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="padding-left: 3px">试飞科目</label>
+            <div class="layui-input-inline" style="width: 85%;">
+                <div id="subject"></div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">执行状态</label>
+            <div class="layui-input-block">
+                <select name="exe_status" id="exe_status" lay-search="">
+                    <option value=""></option>
+                    <option value="预先准备">预先准备</option>
+                    <option value="直接准备">直接准备</option>
+                    <option value="试飞执行">试飞执行</option>
+                    <option value="试飞后讲评">试飞后讲评</option>
+                </select>
+            </div>
+        </div>
+        {#            预测方式#}
+        {#                <div class="layui-form-item">#}
+        {#                  <label class="layui-form-label" style="width: 200px">风险预测方法</label>#}
+        {#                    <div class="layui-input-block">#}
+        {#                      <input type="checkbox" name="like[know]" title="知识" checked>#}
+        {#                      <input type="checkbox" name="like[machine]" title="机器学习">#}
+        {#                    </div>#}
+        {#                  </div>#}
+
+        <br><br>
+        <div class="layui-input-block">
+            <button class="btn btn-info" style="margin-right:15px;margin-bottom:15px;" lay-submit="" id="new"
+                    type="submit">增加
+            </button>
+        </div>
+    </form>
+
+{% endblock %}
+{% block my_script %}
+    <script>
+    var subjects = {{ subjects|safe }}
+    var my_data = []
+    for(var s in subjects){
+        my_data.push({name: subjects[s], value:subjects[s]})
+    }
+
+        var subject = xmSelect.render({
+            el: '#subject',
+            filterable: true,           //搜索
+            toolbar: {show: true, list: ['ALL', 'CLEAR', 'REVERSE']},       //功能框（全选、清空）
+            tips: '全部',           //修改选项提示文字
+            empty: '暂时没有录入数据',    //修改空数据提示文字
+            searchTips: '输入想要搜索科目',  //修改搜索提示文字
+            paging: true,                    // 控制分页显示
+            pageSize: 4,                   //分页大小
+            autoRow: true,                  //自动换行
+            style: {
+                height: '30px',
+
+            },
+            data: my_data,
+        });
+
+        {#$("#checkall").prop ("checked", true );#}
+
+        layui.use(['laydate', 'form'], function () {
+            var laydate = layui.laydate;
+            laydate.render({
+                elem: '#distribute_time'
+            });
+        })
+        $('#new').click(function () {
+            var id = $('#id').val()
+            var risk_level = $('#risk_level').val()
+            var machine_number = $('#machine_number').val()
+            var thesubject = subject.getValue('name')
+
+            var exe_status = $('#exe_status').val()
+
+            var p_data = {
+                'id': id, 'scenario': risk_level,
+                'machine_number': machine_number,
+                'subject': thesubject.toString(),
+                'exe_status': exe_status,
+            }
+            console.log(p_data)
+            $.post("", p_data,
+                function (data) {
+                    xadmin.father_redirect("/task_management/");
+                }, 'json')
+        })
+    </script>
+{% endblock %}

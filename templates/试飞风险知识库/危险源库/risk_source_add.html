@@ -1,0 +1,107 @@
+{% extends 'my_base.html' %}
+{% load static %}
+{% block my_css %}
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/horizontal-timeline.css' %}" rel="stylesheet">
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+<link href="{% static 'css/blue.css' %}" rel="stylesheet">
+<style type="text/css">.jqstooltip { position: absolute;left: 0px;top: 0px;visibility: hidden;background: rgb(0, 0, 0) transparent;background-color: rgba(0,0,0,0.6);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";color: white;font: 10px arial, san serif;text-align: left;white-space: nowrap;padding: 5px;border: 1px solid white;z-index: 10000;}.jqsfield { color: white;font: 10px arial, san serif;text-align: left;}</style>
+{% endblock %}
+
+
+{% block my_content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <section class="cd-horizontal-timeline loaded">
+                        <div class="timeline">
+                            <div class="events-wrapper">
+                                <div class="events" style="width: 1800px;">
+                                    <ol>
+                                        <li><a href="#0" data-date="16/01/2014" class="selected" style="left: 120px;">开始</a></li>
+                                        <li><a href="#0" data-date="28/02/2014" style="left: 300px;">第一步</a></li>
+                                        <li><a href="#0" data-date="20/04/2014" style="left: 480px;">第二步</a></li>
+                                        <li><a href="#0" data-date="20/05/2014" style="left: 600px;display:none;"></a></li>
+                                        <li><a href="#0" data-date="09/07/2014" style="left: 780px;">第三步</a></li>
+                                        <li><a href="#0" data-date="30/08/2014" style="left: 960px;">第四步</a></li>
+                                        <li><a href="#0" data-date="15/09/2014" style="left: 960px;display:none;"></a></li>
+                                        <lsi><a href="#0" data-date="01/11/2014" style="left: 1200px;">第五步</a></lsi>
+                                        <li><a href="#0" data-date="10/12/2014" style="left: 1380px;">第六步</a></li>
+                                        <li><a href="#0" data-date="19/01/2015" style="left: 1500px;display:none;"></a></li>
+                                        <li><a href="#0" data-date="03/03/2015" style="left: 1680px;">结束</a></li>
+                                    </ol>
+                                    <span class="filling-line" aria-hidden="true" style="transform: scaleX(0.0840126);"></span>
+                                </div>
+                            </div>
+                            <ul class="cd-timeline-navigation">
+                                <li><a href="#0" class="prev inactive">Prev</a></li>
+                                <li><a href="#0" class="next">Next</a></li>
+                            </ul>
+                        </div>
+                        <div class="events-content" style="min-height:1000px;">
+                            <ol>
+                                <li class="selected" data-date="16/01/2014" style="text-align:center">
+                                    <h1>
+                                        开始
+                                    </h1>
+                                </li>
+                                <li data-date="28/02/2014" style="text-align:center">
+                                    <h1>
+                                        第一步
+                                    </h1>
+                                </li>
+                                <li data-date="20/04/2014" style="text-align:center">
+                                    <h1>
+                                        第二步
+                                    </h1>
+                                </li>
+                                <li data-date="09/07/2014" style="text-align:center">
+                                    <h1>
+                                        第三步
+                                    </h1>
+                                </li>
+                                <li data-date="30/08/2014" style="text-align:center">
+                                    <h1>
+                                        第四步
+                                    </h1>
+                                </li>
+                                <li data-date="01/11/2014" style="text-align:center">
+                                    <h1>
+                                        第五步
+                                    </h1>
+                                </li>
+                                <li data-date="10/12/2014" style="text-align:center">
+                                    <h1>
+                                        第六步
+                                    </h1>
+                                </li>
+                                <li data-date="03/03/2015" style="text-align:center">
+                                    <h1>
+                                        结束
+                                    </h1>
+                                </li>
+                            </ol>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_script %}
+<script  src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+<script src="{% static 'js/waves.js' %}"></script>
+<script src="{% static 'js/sidebarmenu.js' %}"></script>
+<script src="{% static 'js/sticky-kit.min.js' %}"></script>
+<script src="{% static 'js/jquery.sparkline.min.js' %}"></script>
+<script src="{% static 'js/custom.min.js' %}"></script>
+<script src="{% static 'js/horizontal-timeline.js' %}"></script>
+
+{% endblock %}

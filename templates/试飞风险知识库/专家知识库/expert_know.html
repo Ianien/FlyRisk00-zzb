@@ -1,0 +1,154 @@
+{% extends 'my_base.html' %}
+
+{% block my_content %}
+    <div class="layui-fluid">
+
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body " style="height: auto">
+                        <table class="layui-table" lay-filter="my_table" id="my_table">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            {#            <button class="layui-btn layui-btn-sm" lay-event="new"> 新建数据项</button>#}
+            <button class="layui-btn layui-btn-primary" lay-event="clearFilter">清除所有筛选项</button>
+            {#            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>#}
+            <button class="layui-btn layui-btn-primary" lay-event="export">导出到excel</button>
+            </div>
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-primary" lay-event="alter" style="background-color: #2D93CA">编辑</a>
+    </script>
+{% endblock %}
+
+
+{% block my_script %}
+    <script>
+        layui.config({
+            base: '/static/modules/soulTable/',   // 第三方模块所在目录
+            version: 'v1.6.4' // 插件版本号
+        }).extend({
+            soulTable: 'soulTable',
+        });
+        var tableFilter;
+        layui.use('tableFilter', function () {
+            tableFilter = layui.tableFilter
+        })
+    </script>
+    <script>
+        layui.use(['table', 'soulTable'], function () {
+            var table = layui.table,
+                soulTable = layui.soulTable;
+            layui.soulTable.config({
+                drag: false, // 默认关闭表格的列拖拽，可单独开启
+                overflow: { // 默认所有表格都超出
+                    type: 'tips',
+                    header: true, // 表头支持 overflow
+                    total: true // 合计行支持 overflow
+                }
+            })
+            table.render({
+                elem: '#my_table'
+                , url: '/QE/index/'
+                , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                , defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示'
+                    , layEvent: 'LAYTABLE_TIPS'
+                    , icon: 'layui-icon-tips'
+                }]
+                , height: 500
+                , filter: {
+                    bottom: true
+                }
+                , title: '用户数据表'
+                {#, page: true#}
+                , cols: [[
+                    {type: 'checkbox', fixed: 'left'},
+                    {field: 'ID_zizen', title: '序号', type: 'numbers', width: 80}
+                    , {field: 'error_id', title: '条件', sort: true, filter: true} //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                    , {field: 'bearing_id', title: '结果', sort: true, filter: true}
+                    , {field: 'tool', title: '操作', align: 'left', toolbar: '#barDemo', fixed: "right"}
+                ]]
+                , autoColumnWidth: {
+                    init: true
+                }
+                , done: function () {
+                    soulTable.render(this)
+                }
+            });
+            console.log('yse')
+            //头工具栏事件
+            table.on('toolbar(my_table)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                var data = checkStatus.data;
+                switch (obj.event) {
+                    case 'new':
+                        // 写个异步实现提示和保存
+                        xadmin.open('新建数据项', '/database/expertknowadd/', 1000, 600)
+                        break
+                    case 'delete':
+                        if (data.length == 0) {
+                            layer.alert('请选择要删除的对象');
+                        } else {
+                            layer.confirm('确认要删除吗？', function (index) {
+                                //捉到所有被选中的，发异步进行删除
+                                var id = new Array();
+                                for (var i = 0; i < checkStatus.data.length; i++) {
+                                    id.push(checkStatus.data[i]['error_id']);
+                                }
+                                $.post("data_del/", {"error_ids": JSON.stringify(id)},
+                                    function (data) {
+                                        layer.msg('删除成功', {icon: 1});
+                                        table.reload('test', {
+                                            method: 'get'
+                                            , where: {}
+                                            , page: {
+                                                curr: 1
+                                            }
+                                        });
+                                        location.reload();
+                                    })
+                            });
+                        }
+                        break;
+                    case 'clearFilter':
+                        soulTable.clearFilter('my_table')
+                        break
+                    case 'export':
+                        soulTable.export('my_table');
+                        break
+                    case 'sett':
+                        xadmin.open('配置备用字段名', '/admin/QualityEval/errorreport2head/', 700, 400)
+                        break
+                }
+            })
+
+            //行工具栏事件
+            table.on('tool(my_table)', function (obj) {
+                if (obj.event === 'alter') {
+                    var data = obj.data; //获得当前行数据
+
+                    xadmin.open('编辑', 'data_alternew/?error_id=' + data.error_id, 700, 400)
+                    {#$.post("data_alter/", data,#}
+                    {#    function (data) {#}
+                    {#        layer.msg('保存编辑成功', {icon: 1});#}
+                    {#        table.reload('test', {#}
+                    {#            method: 'get'#}
+                    {#            , where: {}#}
+                    {#            , page: {#}
+                    {#                curr: 1#}
+                    {#            }#}
+                    {#        });#}
+                    {#        location.reload();#}
+                    {#    })#};
+                }
+            });
+        })
+    </script>
+{% endblock %}

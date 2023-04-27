@@ -1,0 +1,24 @@
+{% extends 'my_base.html' %}
+
+{% block my_content %}
+<div class="row">
+    <div class="col-md-6" style="margin-top:200px;text-align:center;">
+        <button style="width:500px;height:300px;font-size:80px" type="button" class="btn btn-primary btn-lg" onclick="choose_weixianyuan()">危险源</button>
+    </div>
+    <div class="col-md-6" style="margin-top:200px;text-align:center;">
+        <button style="width:500px;height:300px;font-size:80px" type="button" class="btn btn-primary btn-lg" onclick="choose_weihai()">危害</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_script %}
+<script>
+    function choose_weixianyuan(){
+        window.location.href='/weixianyuan/';
+    }
+    function choose_weihai(){
+        window.location.href='/weihai/';
+    }
+</script>
+
+{% endblock %}
